@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Automation — Diplomatura No-Code</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fafaf7;
+  --bg2: #f2f1ec;
+  --surface: #ffffff;
+  --surface2: #f7f6f1;
+  --ink: #1a1a18;
+  --ink2: #3d3d38;
+  --muted: #8a8a7e;
+  --muted2: #b5b5a8;
+  --border: #e4e3d8;
+  --accent: #d4500a;
+  --accent2: #1a6b4a;
+  --accent3: #2d52a0;
+  --accent-light: #fdeede;
+  --font-head: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Instrument Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 1rem 3rem; background: rgba(250,250,247,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+.nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--ink); display: flex; align-items: center; gap: 0.6rem; }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulse 2s ease infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.5);opacity:0.5} }
+.nav-links { display: flex; gap: 0.2rem; }
+.nav-link { padding: 0.4rem 0.9rem; border-radius: 100px; font-size: 0.83rem; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: all 0.2s; font-family: var(--font-body); }
+.nav-link:hover { color: var(--ink); background: var(--bg2); }
+.nav-link.active { background: var(--ink); color: var(--bg); }
+.nav-cta { padding: 0.5rem 1.2rem; border-radius: 100px; background: var(--accent); color: #fff; font-size: 0.83rem; font-weight: 500; border: none; cursor: pointer; font-family: var(--font-body); transition: opacity 0.2s; }
+.nav-cta:hover { opacity: 0.85; }
+
+/* HERO */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding: 9rem 5% 5rem; gap: 3rem; align-items: center; position: relative; overflow: hidden; }
+.hero-bg-shape { position: absolute; right: -80px; top: 60px; width: 640px; height: 640px; border-radius: 50%; background: radial-gradient(ellipse, #fdeede 0%, transparent 68%); pointer-events: none; }
+.hero-bg-dots { position: absolute; left: 40%; top: 15%; width: 300px; height: 300px; background-image: radial-gradient(circle, var(--border) 1.5px, transparent 1.5px); background-size: 22px 22px; opacity: 0.8; pointer-events: none; }
+.hero-left { position: relative; z-index: 1; }
+.hero-tag { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--accent-light); border: 1px solid rgba(212,80,10,0.2); border-radius: 100px; padding: 0.35rem 1rem; font-size: 0.75rem; font-weight: 500; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.8rem; animation: slideIn 0.5s ease both; }
+@keyframes slideIn { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:none} }
+.hero h1 { font-family: var(--font-head); font-size: clamp(2.8rem, 5vw, 4.8rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; color: var(--ink); animation: slideIn 0.5s 0.08s ease both; }
+.hero h1 em { font-style: normal; color: var(--accent); position: relative; }
+.hero h1 em::after { content: ''; position: absolute; left: 0; right: 0; bottom: 2px; height: 3px; background: var(--accent); opacity: 0.3; border-radius: 2px; }
+.hero-desc { margin: 1.6rem 0 2.4rem; font-size: 1.05rem; color: var(--ink2); font-weight: 300; max-width: 460px; line-height: 1.75; animation: slideIn 0.5s 0.15s ease both; }
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; animation: slideIn 0.5s 0.22s ease both; }
+.btn-main { padding: 0.9rem 2.2rem; border-radius: 14px; background: var(--ink); color: var(--bg); font-family: var(--font-body); font-weight: 500; font-size: 0.95rem; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.6rem; }
+.btn-main:hover { background: var(--accent); transform: translateY(-2px); }
+.btn-ghost { padding: 0.9rem 2rem; border-radius: 14px; background: transparent; color: var(--ink2); font-family: var(--font-body); font-weight: 500; font-size: 0.95rem; border: 1.5px solid var(--border); cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.btn-ghost:hover { border-color: var(--ink2); }
+
+/* HERO RIGHT */
+.hero-right { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1rem; animation: slideIn 0.6s 0.3s ease both; }
+.hero-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px; padding: 1.4rem 1.8rem; display: flex; align-items: center; gap: 1.2rem; transition: border-color 0.2s, transform 0.2s; }
+.hero-card:hover { border-color: var(--accent); transform: translateX(5px); }
+.hc-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+.hc-orange { background: #fdeede; } .hc-green { background: #ddf0e7; } .hc-blue { background: #dce8f9; }
+.hc-text strong { font-family: var(--font-head); font-weight: 700; font-size: 1rem; display: block; margin-bottom: 0.15rem; }
+.hc-text span { font-size: 0.82rem; color: var(--muted); }
+.hero-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin-top: 0.3rem; }
+.spec-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem 1rem; display: flex; align-items: center; gap: 0.6rem; }
+.spec-chip .sc-num { font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; color: var(--ink); }
+.spec-chip .sc-label { font-size: 0.75rem; color: var(--muted); line-height: 1.3; }
+
+/* SECTION */
+.s-wrap { max-width: 1160px; margin: 0 auto; padding: 5rem 5%; }
+.s-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-weight: 600; display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
+.s-label::before { content:''; width: 20px; height: 2px; background: var(--accent); border-radius:1px; }
+.s-title { font-family: var(--font-head); font-size: clamp(1.9rem, 3.5vw, 2.9rem); font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; color: var(--ink); }
+.s-sub { color: var(--muted); font-size: 1rem; max-width: 520px; margin-top: 0.7rem; }
+
+/* PARA QUIÉN */
+.quien-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-top: 2.5rem; }
+@media(max-width:768px) { .quien-grid { grid-template-columns: 1fr; } }
+.qcard { background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px; padding: 2rem; transition: all 0.25s; position: relative; overflow: hidden; }
+.qcard:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.07); }
+.qcard-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 20px 20px 0 0; }
+.qa-orange { background: var(--accent); } .qa-green { background: var(--accent2); } .qa-blue { background: var(--accent3); }
+.qcard-emoji { font-size: 2rem; margin-bottom: 1rem; display: block; }
+.qcard h3 { font-family: var(--font-head); font-size: 1.1rem; font-weight: 700; margin-bottom: 0.7rem; }
+.qcard p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+
+.nocode-banner { margin-top: 3rem; background: var(--ink); border-radius: 24px; padding: 2.5rem 3rem; display: flex; align-items: center; gap: 3rem; flex-wrap: wrap; }
+.nb-title { font-family: var(--font-head); font-size: 1.6rem; font-weight: 800; color: #fff; flex: 1; min-width: 220px; letter-spacing: -0.02em; }
+.nb-title span { color: var(--accent); }
+.nb-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; flex: 2; }
+.nb-pill { padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.82rem; font-weight: 500; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); }
+
+/* ── CASO LUMINA ── */
+.lumina-intro {
+  background: var(--ink);
+  border-radius: 28px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.lumina-intro::before {
+  content: 'LUMINA';
+  position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+  font-family: var(--font-head); font-size: 9rem; font-weight: 800;
+  color: rgba(255,255,255,0.03); letter-spacing: -0.04em; line-height: 1;
+  pointer-events: none; user-select: none;
+}
+.lumina-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(212,80,10,0.2); border: 1px solid rgba(212,80,10,0.4);
+  border-radius: 100px; padding: 0.3rem 1rem;
+  font-size: 0.72rem; font-weight: 600; color: #f0a070;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.2rem;
+}
+.lumina-intro h3 {
+  font-family: var(--font-head); font-size: 1.7rem; font-weight: 800;
+  color: #fff; letter-spacing: -0.02em; margin-bottom: 0.8rem; line-height: 1.2;
+}
+.lumina-intro p { font-size: 0.95rem; color: rgba(255,255,255,0.55); max-width: 580px; line-height: 1.75; }
+.lumina-stats {
+  display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;
+}
+.lstat { border-left: 2px solid rgba(212,80,10,0.5); padding-left: 1rem; }
+.lstat-num { font-family: var(--font-head); font-size: 1.6rem; font-weight: 800; color: #fff; display: block; line-height: 1; }
+.lstat-label { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 0.2rem; }
+
+/* PROBLEMA → SOLUCIÓN */
+.problem-solution {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 3rem;
+}
+@media(max-width:700px) { .problem-solution { grid-template-columns: 1fr; } }
+.ps-card {
+  border-radius: 20px; padding: 2rem;
+  border: 1.5px solid var(--border);
+}
+.ps-problem { background: #fff8f5; border-color: rgba(212,80,10,0.2); }
+.ps-solution { background: #f5faf7; border-color: rgba(26,107,74,0.2); }
+.ps-card-label {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.ps-problem .ps-card-label { color: var(--accent); }
+.ps-solution .ps-card-label { color: var(--accent2); }
+.ps-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+.ps-list li { font-size: 0.9rem; color: var(--ink2); display: flex; gap: 0.7rem; align-items: flex-start; line-height: 1.5; }
+.ps-list li::before { flex-shrink: 0; margin-top: 0.05rem; }
+.ps-problem .ps-list li::before { content: '✕'; color: var(--accent); font-size: 0.8rem; font-weight: 700; }
+.ps-solution .ps-list li::before { content: '✓'; color: var(--accent2); font-size: 0.85rem; font-weight: 700; }
+
+/* FLUJO DEL AGENTE */
+.agent-flow-title {
+  font-family: var(--font-head); font-size: 1.3rem; font-weight: 800;
+  letter-spacing: -0.02em; margin-bottom: 0.4rem;
+}
+.agent-flow-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 2rem; }
+
+.flow-steps {
+  display: flex; flex-direction: column; gap: 0;
+  position: relative;
+}
+.flow-step {
+  display: grid; grid-template-columns: 56px 1fr;
+  gap: 1.5rem; align-items: start;
+  padding-bottom: 2rem;
+  position: relative;
+}
+.flow-step:last-child { padding-bottom: 0; }
+
+/* vertical line */
+.flow-step:not(:last-child) .step-num::after {
+  content: '';
+  position: absolute;
+  left: 27px; top: 56px;
+  width: 2px;
+  bottom: 0;
+  background: linear-gradient(to bottom, var(--border), transparent);
+}
+.step-num {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; flex-shrink: 0;
+  position: relative;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+}
+.step-body {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 1.4rem 1.6rem;
+  transition: border-color 0.2s;
+}
+.step-body:hover { border-color: rgba(212,80,10,0.3); }
+.step-trigger {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted2); margin-bottom: 0.35rem;
+}
+.step-body h4 { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+.step-body p { font-size: 0.86rem; color: var(--muted); line-height: 1.6; }
+.step-tools { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.8rem; }
+.step-tool {
+  padding: 0.22rem 0.7rem; border-radius: 100px;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em;
+  background: var(--surface2); border: 1px solid var(--border); color: var(--muted2);
+}
+.step-decision {
+  margin-top: 0.8rem;
+  background: var(--bg2); border-radius: 10px; padding: 0.7rem 1rem;
+  font-size: 0.82rem; color: var(--ink2);
+  border-left: 3px solid var(--accent);
+}
+.step-decision strong { color: var(--accent); }
+
+/* PLAN DE ESTUDIOS */
+.blocks-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 2.5rem 0; }
+.block-tab { padding: 0.55rem 1.2rem; border-radius: 100px; font-size: 0.85rem; font-weight: 500; border: 1.5px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
+.block-tab:hover { color: var(--ink); border-color: var(--ink); }
+.block-tab.bt-orange.active { background: var(--accent); border-color: var(--accent); color:#fff; }
+.block-tab.bt-green.active { background: var(--accent2); border-color: var(--accent2); color:#fff; }
+.block-tab.bt-blue.active { background: var(--accent3); border-color: var(--accent3); color:#fff; }
+.block-tab.bt-ink.active { background: #1a1a18; border-color: #1a1a18; color:#fff; }
+
+.block-panel { display: none; }
+.block-panel.active { display: block; }
+
+.block-header { background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px 20px 0 0; padding: 2rem 2.5rem; display: flex; align-items: flex-start; gap: 2rem; border-bottom: none; }
+.bh-num { font-family: var(--font-head); font-size: 3.5rem; font-weight: 800; line-height: 1; flex-shrink: 0; opacity: 0.1; color: var(--ink); }
+.bh-tag { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; margin-bottom: 0.4rem; }
+.bh-title { font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+.bh-desc { font-size: 0.9rem; color: var(--muted); max-width: 600px; line-height: 1.65; }
+
+.classes-grid { border: 1.5px solid var(--border); border-top: none; border-radius: 0 0 20px 20px; overflow: hidden; }
+.class-row { display: grid; grid-template-columns: 70px 1fr auto; align-items: start; gap: 1.5rem; padding: 1.4rem 2rem; border-bottom: 1px solid var(--border); background: var(--surface); transition: background 0.15s; }
+.class-row:last-child { border-bottom: none; }
+.class-row:hover { background: var(--surface2); }
+.class-week { font-family: var(--font-head); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted2); padding-top: 0.15rem; }
+.class-week span { display: block; font-size: 1.3rem; font-weight: 800; color: var(--ink); letter-spacing: 0; line-height: 1; }
+.class-title { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; color: var(--ink); }
+.class-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.6; }
+.class-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.6rem; }
+.ctag { padding: 0.2rem 0.7rem; border-radius: 100px; font-size: 0.72rem; font-weight: 500; background: var(--surface2); color: var(--muted2); border: 1px solid var(--border); }
+.lumina-tag { background: #fdeede; color: var(--accent); border-color: rgba(212,80,10,0.2); }
+.class-type { padding: 0.3rem 0.8rem; border-radius: 100px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; margin-top: 0.15rem; }
+.type-practica { background: #ddf0e7; color: var(--accent2); }
+.type-proyecto { background: #fdeede; color: var(--accent); }
+.type-teoria { background: #dce8f9; color: var(--accent3); }
+.type-caso { background: #fff0e0; color: #b84a00; }
+
+.project-banner { margin-top: 1.5rem; border: 1.5px dashed var(--border); border-radius: 16px; padding: 1.5rem 2rem; display: flex; align-items: flex-start; gap: 1.2rem; background: var(--surface2); }
+.pb-icon { font-size: 2rem; flex-shrink: 0; }
+.pb-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--accent); margin-bottom: 0.3rem; }
+.pb-title { font-family: var(--font-head); font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; }
+.pb-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+.b-orange .bh-tag { color: var(--accent); }
+.b-green .bh-tag { color: var(--accent2); }
+.b-green .class-week span { color: var(--accent2); }
+.b-blue .bh-tag { color: var(--accent3); }
+.b-blue .class-week span { color: var(--accent3); }
+.b-ink .bh-tag { color: #6b4dff; }
+.b-ink .class-week span { color: #6b4dff; }
+
+/* HERRAMIENTAS */
+.tools-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 3rem; background: rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; }
+@media(max-width:900px) { .tools-grid { grid-template-columns: repeat(2,1fr); } }
+.tool-item { background: var(--ink); padding: 2rem; transition: background 0.2s; }
+.tool-item:hover { background: #222220; }
+.tool-emoji { font-size: 2rem; margin-bottom: 1rem; display: block; }
+.tool-name { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+.tool-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
+.tool-tag { display: inline-block; margin-top: 0.8rem; padding: 0.2rem 0.7rem; border-radius: 100px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); }
+
+/* FOOTER */
+footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 3rem 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-size: 0.83rem; color: var(--muted); }
+.footer-logo { font-family: var(--font-head); font-weight: 800; color: var(--ink); font-size: 0.95rem; }
+
+@media(max-width:900px) {
+  .hero { grid-template-columns: 1fr; padding-top: 8rem; }
+  .hero-right { display: none; }
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .class-row { grid-template-columns: 55px 1fr; }
+  .class-type { display: none; }
+}
+
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><div class="nav-dot"></div> AI Automation</div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="goTo('hero')">Inicio</button>
+    <button class="nav-link" onclick="goTo('quien')">¿Para quién?</button>
+    <button class="nav-link" onclick="goTo('caso')">Caso real</button>
+    <button class="nav-link" onclick="goTo('plan')">Plan de estudios</button>
+    <button class="nav-link" onclick="goTo('stack')">Herramientas</button>
+  </div>
+  <button class="nav-cta" onclick="goTo('plan')">Ver el programa →</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg-shape"></div>
+  <div class="hero-bg-dots"></div>
+  <div class="hero-left">
+    <div class="hero-tag">🎓 Diplomatura · 20 semanas · No-Code</div>
+    <h1>Tu negocio trabajando<br>mientras vos <em>dormís</em></h1>
+    <p class="hero-desc">Aprendé a automatizar las tareas repetitivas de tu negocio usando Inteligencia Artificial. Sin código, sin necesitar un programador, con resultados visibles desde la primera semana.</p>
+    <div class="hero-actions">
+      <a href="#caso" class="btn-main" onclick="goTo('caso')">Ver caso real →</a>
+      <a href="#plan" class="btn-ghost" onclick="goTo('plan')">Ver el programa</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card">
+      <div class="hc-icon hc-orange">💸</div>
+      <div class="hc-text"><strong>Reducí costos operativos</strong><span>Tareas manuales que hoy te cuestan horas y dinero</span></div>
+    </div>
+    <div class="hero-card">
+      <div class="hc-icon hc-green">⚡</div>
+      <div class="hc-text"><strong>Respondé 24/7 sin personal extra</strong><span>Atención al cliente automática, sin sumar sueldos</span></div>
+    </div>
+    <div class="hero-card">
+      <div class="hc-icon hc-blue">📈</div>
+      <div class="hc-text"><strong>Escalá sin escalar el equipo</strong><span>Más pedidos, más clientes — mismo equipo humano</span></div>
+    </div>
+    <div class="hero-specs">
+      <div class="spec-chip"><div><div class="sc-num">20</div><div class="sc-label">clases de<br>2 hs cada una</div></div></div>
+      <div class="spec-chip"><div><div class="sc-num">40</div><div class="sc-label">horas totales<br>de formación</div></div></div>
+      <div class="spec-chip"><div><div class="sc-num">1×</div><div class="sc-label">clase en vivo<br>por semana</div></div></div>
+      <div class="spec-chip"><div><div class="sc-num">0</div><div class="sc-label">requisitos<br>técnicos previos</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUIÉN -->
+<div id="quien" style="background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+<div class="s-wrap">
+  <div class="s-label">¿Para quién es?</div>
+  <h2 class="s-title">Para quienes tienen un negocio<br>y quieren que rinda más</h2>
+  <p class="s-sub">No necesitás saber de tecnología. Necesitás querer que tu negocio funcione mejor, con menos esfuerzo manual.</p>
+  <div class="quien-grid reveal">
+    <div class="qcard">
+      <div class="qcard-accent qa-orange"></div>
+      <span class="qcard-emoji">🛍️</span>
+      <h3>Dueños de negocio</h3>
+      <p>Tiendas online, locales físicos con ventas digitales, servicios. Querés que el negocio funcione solo en las partes repetitivas y dedicarte a lo que importa.</p>
+    </div>
+    <div class="qcard">
+      <div class="qcard-accent qa-green"></div>
+      <span class="qcard-emoji">🧑‍💼</span>
+      <h3>Freelancers y consultores</h3>
+      <p>Vendés tu tiempo y conocimiento. Con automatización podés atender más clientes, entregar más rápido y cobrar más — sin trabajar más horas.</p>
+    </div>
+    <div class="qcard">
+      <div class="qcard-accent qa-blue"></div>
+      <span class="qcard-emoji">📊</span>
+      <h3>Profesionales en empresas</h3>
+      <p>Trabajás en marketing, ventas, operaciones o administración. Tenés procesos repetitivos que consumen horas y querés automatizarlos sin depender del área de IT.</p>
+    </div>
+  </div>
+  <div class="nocode-banner reveal">
+    <div class="nb-title">Todo visual.<br>Cero <span>código</span>.</div>
+    <div class="nb-pills">
+      <span class="nb-pill">🔄 n8n — flujos visuales</span>
+      <span class="nb-pill">⚡ Make — automatizaciones</span>
+      <span class="nb-pill">🤖 ChatGPT / Gemini</span>
+      <span class="nb-pill">📋 Airtable</span>
+      <span class="nb-pill">📊 Google Sheets</span>
+      <span class="nb-pill">📬 Gmail / WhatsApp</span>
+      <span class="nb-pill">🔗 Zapier</span>
+      <span class="nb-pill">🧩 Notion</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CASO LUMINA -->
+<div id="caso" style="border-top:1px solid var(--border);">
+<div class="s-wrap">
+  <div class="s-label">Caso real del programa</div>
+  <h2 class="s-title">Lumina: de responder<br>emails a mano a un agente<br>que trabaja solo</h2>
+  <p class="s-sub" style="margin-bottom:3rem;">A lo largo del programa construís el sistema completo de este caso. Al final, tenés algo funcional que podés adaptar a tu propio negocio.</p>
+
+  <!-- LUMINA INTRO -->
+  <div class="lumina-intro reveal">
+    <div class="lumina-badge">📦 Caso de negocio del programa</div>
+    <h3>Lumina — Tienda de productos para el hogar</h3>
+    <p>Lumina vende online y físicamente. Reciben entre 40 y 80 consultas post-venta por día: estado de envío, cambios, devoluciones, garantías y reclamos. Hasta ahora, una persona del equipo dedicaba 4 horas diarias a responder los mismos mensajes una y otra vez.</p>
+    <div class="lumina-stats">
+      <div class="lstat"><span class="lstat-num">4hs</span><span class="lstat-label">diarias en atención manual</span></div>
+      <div class="lstat"><span class="lstat-num">80%</span><span class="lstat-label">de consultas son repetitivas</span></div>
+      <div class="lstat"><span class="lstat-num">3 días</span><span class="lstat-label">de demora promedio en responder</span></div>
+    </div>
+  </div>
+
+  <!-- PROBLEMA / SOLUCIÓN -->
+  <div class="problem-solution reveal">
+    <div class="ps-card ps-problem">
+      <div class="ps-card-label">⚠️ Antes — Sin automatización</div>
+      <ul class="ps-list">
+        <li>Un empleado revisa emails manualmente cada mañana</li>
+        <li>Busca el estado del pedido en otro sistema por separado</li>
+        <li>Copia y pega respuestas desde un documento de Word</li>
+        <li>Si es fin de semana o feriado, nadie responde</li>
+        <li>Los reclamos urgentes se pierden entre los simples</li>
+        <li>No hay registro de qué se respondió ni cuándo</li>
+      </ul>
+    </div>
+    <div class="ps-card ps-solution">
+      <div class="ps-card-label">✅ Después — Con el agente de IA</div>
+      <ul class="ps-list">
+        <li>El agente lee y clasifica cada consulta en segundos</li>
+        <li>Consulta el estado del pedido en tiempo real automáticamente</li>
+        <li>Responde al cliente con información personalizada y precisa</li>
+        <li>Funciona los 7 días, las 24 horas, sin supervisión</li>
+        <li>Los reclamos complejos llegan al humano con contexto completo</li>
+        <li>Todo queda registrado en Airtable con métricas de atención</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FLUJO DEL AGENTE -->
+  <div class="reveal">
+    <div class="agent-flow-title">¿Cómo funciona el agente por dentro?</div>
+    <div class="agent-flow-sub">Cada consulta que llega a Lumina pasa por estos pasos — automáticamente, sin que nadie lo active.</div>
+
+    <div class="flow-steps">
+
+      <div class="flow-step">
+        <div class="step-num">📩</div>
+        <div class="step-body">
+          <div class="step-trigger">Paso 1 — Trigger</div>
+          <h4>Llega un email o mensaje de WhatsApp</h4>
+          <p>El flujo se activa solo cuando entra una nueva consulta. No hay que revisar nada manualmente. Funciona con Gmail, WhatsApp Business o un formulario web.</p>
+          <div class="step-tools">
+            <span class="step-tool">Gmail</span>
+            <span class="step-tool">WhatsApp Business</span>
+            <span class="step-tool">n8n Trigger</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">🧠</div>
+        <div class="step-body">
+          <div class="step-trigger">Paso 2 — Clasificación con IA</div>
+          <h4>El agente lee y entiende qué quiere el cliente</h4>
+          <p>Un modelo de lenguaje (ChatGPT o Gemini) lee el mensaje y lo clasifica: ¿es una consulta de estado de envío, un reclamo, una devolución, o algo que requiere atención humana? Sin reglas manuales — la IA lo interpreta.</p>
+          <div class="step-tools">
+            <span class="step-tool">ChatGPT / Gemini</span>
+            <span class="step-tool">Prompt Engineering</span>
+            <span class="step-tool">n8n AI Node</span>
+          </div>
+          <div class="step-decision">
+            <strong>Decisión automática:</strong> Si es consulta simple → sigue al paso 3. Si es reclamo complejo o urgente → salta al paso 5.
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">🔍</div>
+        <div class="step-body">
+          <div class="step-trigger">Paso 3 — Búsqueda de datos</div>
+          <h4>Busca el pedido del cliente en la base de datos</h4>
+          <p>El agente extrae el número de pedido del mensaje (o lo busca por email del cliente) y consulta automáticamente el estado en Airtable o Google Sheets. Obtiene: estado del envío, fecha estimada, número de tracking.</p>
+          <div class="step-tools">
+            <span class="step-tool">Airtable</span>
+            <span class="step-tool">Google Sheets</span>
+            <span class="step-tool">n8n HTTP Node</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">✍️</div>
+        <div class="step-body">
+          <div class="step-trigger">Paso 4 — Generación de respuesta</div>
+          <h4>Redacta una respuesta personalizada con los datos reales</h4>
+          <p>Con los datos del pedido, la IA genera una respuesta en el tono de Lumina: amigable, clara y con la información exacta del cliente. No es un template genérico — es una respuesta redactada para esa persona, ese pedido, ese momento.</p>
+          <div class="step-tools">
+            <span class="step-tool">ChatGPT</span>
+            <span class="step-tool">Prompt con datos dinámicos</span>
+            <span class="step-tool">Gmail Send</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">🚨</div>
+        <div class="step-body">
+          <div class="step-trigger">Paso 5 — Escalada inteligente (si aplica)</div>
+          <h4>Los casos complejos llegan al humano con todo el contexto</h4>
+          <p>Si el agente detecta un reclamo serio, una devolución fuera de política o un cliente muy insatisfecho, no responde solo. Envía una alerta por Slack o email al responsable del equipo, con el historial completo del cliente y una sugerencia de respuesta lista para usar.</p>
+          <div class="step-tools">
+            <span class="step-tool">Slack</span>
+            <span class="step-tool">Email interno</span>
+            <span class="step-tool">Priorización con IA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">📊</div>
+        <div class="step-body">
+          <div class="step-trigger">Paso 6 — Registro y métricas</div>
+          <h4>Todo queda documentado y medible</h4>
+          <p>Cada interacción — resuelta por IA o escalada a humano — se registra en Airtable con fecha, tipo de consulta, tiempo de respuesta y resultado. Un dashboard en Google Sheets muestra el impacto: cuántas horas se ahorraron, cuál es el tipo de consulta más frecuente, qué productos generan más reclamos.</p>
+          <div class="step-tools">
+            <span class="step-tool">Airtable</span>
+            <span class="step-tool">Google Sheets Dashboard</span>
+            <span class="step-tool">ROI automático</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div style="margin-top:3rem; background: var(--surface); border:1.5px solid var(--border); border-radius:20px; padding:2rem 2.5rem; display:flex; gap:3rem; flex-wrap:wrap; align-items:center;" class="reveal">
+    <div style="flex:1; min-width:200px;">
+      <div class="s-label" style="margin-bottom:0.5rem;">Resultado de Lumina</div>
+      <div style="font-family:var(--font-head); font-size:1.3rem; font-weight:800; letter-spacing:-0.02em;">De 4 horas manuales<br>a 15 minutos de supervisión</div>
+    </div>
+    <div style="display:flex; gap:2rem; flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-family:var(--font-head); font-size:2.2rem; font-weight:800; color:var(--accent2);">92%</div>
+        <div style="font-size:0.78rem; color:var(--muted);">consultas resueltas<br>automáticamente</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--font-head); font-size:2.2rem; font-weight:800; color:var(--accent2);">&lt;2min</div>
+        <div style="font-size:0.78rem; color:var(--muted);">tiempo de respuesta<br>promedio</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--font-head); font-size:2.2rem; font-weight:800; color:var(--accent2);">24/7</div>
+        <div style="font-size:0.78rem; color:var(--muted);">atención continua<br>sin personal extra</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- PLAN DE ESTUDIOS -->
+<div class="s-wrap" id="plan" style="border-top:1px solid var(--border);">
+  <div class="s-label">Plan de estudios</div>
+  <h2 class="s-title">20 clases. Cada una con<br>un resultado concreto.</h2>
+  <p class="s-sub">Cada semana salís de la clase con algo funcionando en tu negocio — no solo con teoría. El caso Lumina es el hilo conductor de todo el programa.</p>
+
+  <div class="blocks-nav reveal">
+    <button class="block-tab bt-orange active" onclick="switchBlock('b1', this)">🟠 Bloque 1 — Fundamentos</button>
+    <button class="block-tab bt-green" onclick="switchBlock('b2', this)">🟢 Bloque 2 — Automatizaciones</button>
+    <button class="block-tab bt-blue" onclick="switchBlock('b3', this)">🔵 Bloque 3 — IA en tu negocio</button>
+    <button class="block-tab bt-ink" onclick="switchBlock('b4', this)">🟣 Bloque 4 — Agente completo</button>
+  </div>
+
+  <!-- BLOQUE 1 -->
+  <div class="block-panel b-orange active reveal" id="b1">
+    <div class="block-header">
+      <div class="bh-num">01</div>
+      <div class="bh-content">
+        <div class="bh-tag" style="color:var(--accent)">Semanas 1–5 · Fundamentos</div>
+        <div class="bh-title">Entender cómo funciona para poder usarlo</div>
+        <div class="bh-desc">Antes de automatizar, hay que entender qué puede hacer la IA por tu negocio y qué no. Este bloque te da el mapa completo y te prepara para construir flujos desde la semana 2.</div>
+      </div>
+    </div>
+    <div class="classes-grid">
+      <div class="class-row">
+        <div class="class-week">Sem<span>01</span></div>
+        <div class="class-content">
+          <div class="class-title">¿Qué procesos de tu negocio se pueden automatizar?</div>
+          <div class="class-desc">No todo se automatiza igual. Aprendés a identificar las tareas repetitivas con alto impacto en tu negocio. Ejercicio: mapear los 3 procesos que más tiempo te consumen hoy.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Caso Lumina</span><span class="ctag">Mapeo de procesos</span><span class="ctag">ROI potencial</span></div>
+        </div>
+        <div class="class-type type-teoria">Estrategia</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>02</span></div>
+        <div class="class-content">
+          <div class="class-title">Hablarle bien a la IA: prompting para dueños de negocio</div>
+          <div class="class-desc">Cómo pedirle a ChatGPT o Gemini que redacte emails, analice quejas, clasifique pedidos o escriba respuestas en el tono de tu marca. Práctica directa con tu negocio.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: respuestas de atención</span><span class="ctag">ChatGPT</span><span class="ctag">Gemini</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>03</span></div>
+        <div class="class-content">
+          <div class="class-title">Ordenar la información de tu negocio para que la IA la use</div>
+          <div class="class-desc">Airtable y Google Sheets como base de datos sencilla. Cómo estructurar clientes, pedidos, consultas y productos para que un flujo automático pueda leerlos y procesarlos.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: base de pedidos</span><span class="ctag">Airtable</span><span class="ctag">Google Sheets</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>04</span></div>
+        <div class="class-content">
+          <div class="class-title">Tu primera automatización: cuando pasa X, hacé Y</div>
+          <div class="class-desc">Lógica de flujos sin código. Cuando llega un formulario, mandá un email. Cuando se actualiza una celda, avisale a Slack. Primer flujo real con Zapier en clase.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: aviso de pedido nuevo</span><span class="ctag">Zapier</span><span class="ctag">Lógica de flujos</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>05</span></div>
+        <div class="class-content">
+          <div class="class-title">📦 Entregable 1: Mapa de automatización de tu negocio</div>
+          <div class="class-desc">Identificás los 3 procesos de mayor impacto en tu negocio, estimás el tiempo que ahorrarías automatizándolos y presentás el plan al grupo. No es un flujo técnico — es una decisión de negocio.</div>
+          <div class="class-tags"><span class="ctag">Plan de automatización</span><span class="ctag">ROI estimado</span><span class="ctag">Priorización</span></div>
+        </div>
+        <div class="class-type type-proyecto">Entregable</div>
+      </div>
+    </div>
+    <div class="project-banner">
+      <span class="pb-icon">🗺️</span>
+      <div>
+        <div class="pb-label">Entregable del bloque 1</div>
+        <div class="pb-title">Mapa de automatización de tu propio negocio</div>
+        <div class="pb-desc">Salís del bloque con claridad total sobre qué automatizar primero, cuánto tiempo te ahorra y en qué orden encararlo. La hoja de ruta de los próximos 3 meses de tu negocio.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="block-panel b-green" id="b2">
+    <div class="block-header">
+      <div class="bh-num">02</div>
+      <div class="bh-content">
+        <div class="bh-tag">Semanas 6–10 · Automatizaciones</div>
+        <div class="bh-title">Conectar tus herramientas sin tocar código</div>
+        <div class="bh-desc">Construís flujos reales que conectan las herramientas que ya usás: Gmail, WhatsApp, hojas de cálculo, CRM. Con n8n y Make de forma visual, como armar piezas de LEGO.</div>
+      </div>
+    </div>
+    <div class="classes-grid">
+      <div class="class-row">
+        <div class="class-week">Sem<span>06</span></div>
+        <div class="class-content">
+          <div class="class-title">n8n: el tablero de control de tu negocio</div>
+          <div class="class-desc">Primer flujo en n8n: cuando entra un email a Lumina con la palabra "pedido", guardá automáticamente los datos en Airtable. Sin código — solo conectar bloques visuales.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: captura de consultas</span><span class="ctag">n8n</span><span class="ctag">Gmail</span><span class="ctag">Airtable</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>07</span></div>
+        <div class="class-content">
+          <div class="class-title">Flujos con condiciones: distintas respuestas según el caso</div>
+          <div class="class-desc">¿El pedido está despachado? Mandá un email. ¿Está demorado? Mandá otro con disculpas. Los flujos toman decisiones automáticas según los datos reales del negocio.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: respuestas según estado</span><span class="ctag">n8n</span><span class="ctag">Lógica condicional</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>08</span></div>
+        <div class="class-content">
+          <div class="class-title">Conectar WhatsApp, Slack y Notion al flujo</div>
+          <div class="class-desc">Lumina necesita que cuando llega un reclamo, el equipo reciba un aviso por Slack con el detalle. Y que todo quede anotado en Notion automáticamente. Lo construís en clase.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: alertas al equipo</span><span class="ctag">Slack</span><span class="ctag">WhatsApp</span><span class="ctag">Notion</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>09</span></div>
+        <div class="class-content">
+          <div class="class-title">Qué hacer cuando algo falla: manejo de errores</div>
+          <div class="class-desc">Un flujo sin manejo de errores se rompe en silencio. Aprendés a configurar alertas cuando algo sale mal, rutas alternativas y cómo testear que todo funciona antes de activarlo.</div>
+          <div class="class-tags"><span class="ctag">n8n / Make</span><span class="ctag">Error handling</span><span class="ctag">Testing</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>10</span></div>
+        <div class="class-content">
+          <div class="class-title">📦 Entregable 2: Pipeline operativo de tu negocio</div>
+          <div class="class-desc">Construís y presentás un flujo funcional que automatiza un proceso real de tu negocio: captura datos, toma decisiones y notifica al equipo. Tiene que funcionar en vivo durante la demo.</div>
+          <div class="class-tags"><span class="ctag">n8n / Make</span><span class="ctag">Demo en vivo</span><span class="ctag">Flujo productivo</span></div>
+        </div>
+        <div class="class-type type-proyecto">Entregable</div>
+      </div>
+    </div>
+    <div class="project-banner">
+      <span class="pb-icon">⚙️</span>
+      <div>
+        <div class="pb-label">Entregable del bloque 2</div>
+        <div class="pb-title">Un proceso de tu negocio funcionando solo</div>
+        <div class="pb-desc">Un flujo real en n8n o Make, conectado a las herramientas que ya usás, que reemplaza una tarea manual. Lo presentás en vivo y lo llevás funcionando a tu negocio.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <div class="block-panel b-blue" id="b3">
+    <div class="block-header">
+      <div class="bh-num">03</div>
+      <div class="bh-content">
+        <div class="bh-tag">Semanas 11–15 · IA en tu negocio</div>
+        <div class="bh-title">Ponerle inteligencia a tus flujos</div>
+        <div class="bh-desc">Tus flujos ya conectan herramientas. Ahora les agregás un cerebro. La IA va a leer mensajes, interpretar intenciones, redactar respuestas y tomar decisiones — todo dentro de tu proceso automatizado.</div>
+      </div>
+    </div>
+    <div class="classes-grid">
+      <div class="class-row">
+        <div class="class-week">Sem<span>11</span></div>
+        <div class="class-content">
+          <div class="class-title">Integrar ChatGPT en tu flujo: la IA como empleado del proceso</div>
+          <div class="class-desc">Conectás ChatGPT o Gemini a un nodo de n8n. La IA lee el email del cliente y decide qué tipo de consulta es. Lo que antes hacías leyendo uno por uno, ahora lo hace solo.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: clasificador de consultas</span><span class="ctag">OpenAI API</span><span class="ctag">n8n</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>12</span></div>
+        <div class="class-content">
+          <div class="class-title">Respuestas automáticas que suenan humanas</div>
+          <div class="class-desc">La IA genera respuestas personalizadas usando los datos reales del pedido. No son templates — son mensajes redactados con el nombre del cliente, el estado exacto del envío y el tono de tu marca.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: respuestas personalizadas</span><span class="ctag">Prompt con variables</span><span class="ctag">Tono de marca</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>13</span></div>
+        <div class="class-content">
+          <div class="class-title">La IA detecta clientes insatisfechos antes de que escalen</div>
+          <div class="class-desc">Análisis de sentimiento automático: la IA detecta frustración, urgencia o enojo en los mensajes. Los casos críticos van directo al responsable con contexto completo y sugerencia de respuesta.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: detección de reclamos</span><span class="ctag">Análisis de sentimiento</span><span class="ctag">Slack alert</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>14</span></div>
+        <div class="class-content">
+          <div class="class-title">Generar documentos, reportes y resúmenes automáticos</div>
+          <div class="class-desc">La IA convierte datos crudos en comunicación útil: genera el resumen semanal de atención al cliente de Lumina, identifica los productos con más reclamos y lo manda por email al dueño cada lunes.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: reporte semanal</span><span class="ctag">Google Docs</span><span class="ctag">IA generativa</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>15</span></div>
+        <div class="class-content">
+          <div class="class-title">📦 Entregable 3: Sistema de atención con IA para tu negocio</div>
+          <div class="class-desc">Construís un flujo que recibe mensajes de clientes, los clasifica con IA, responde automáticamente los simples y escala los complejos con contexto. Adaptado a tu negocio real.</div>
+          <div class="class-tags"><span class="ctag">n8n + IA</span><span class="ctag">Gmail / WhatsApp</span><span class="ctag">Demo en vivo</span></div>
+        </div>
+        <div class="class-type type-proyecto">Entregable</div>
+      </div>
+    </div>
+    <div class="project-banner">
+      <span class="pb-icon">🤖</span>
+      <div>
+        <div class="pb-label">Entregable del bloque 3</div>
+        <div class="pb-title">Tu negocio respondiendo clientes con IA</div>
+        <div class="pb-desc">Un sistema real de atención post-venta con IA integrada: clasifica, responde, escala y registra. Listo para activarlo en tu negocio la semana siguiente.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 4 -->
+  <div class="block-panel b-ink" id="b4">
+    <div class="block-header">
+      <div class="bh-num">04</div>
+      <div class="bh-content">
+        <div class="bh-tag" style="color:#6b4dff">Semanas 16–20 · Agente completo</div>
+        <div class="bh-title">Construir el agente completo y medirlo</div>
+        <div class="bh-desc">Cerrás el ciclo: el agente ya no solo responde, sino que razona, consulta información, aprende de los casos anteriores y te entrega métricas de impacto. El programa termina con tu propio Demo Day.</div>
+      </div>
+    </div>
+    <div class="classes-grid">
+      <div class="class-row">
+        <div class="class-week">Sem<span>16</span></div>
+        <div class="class-content">
+          <div class="class-title">Del chatbot al agente: la diferencia que cambia todo</div>
+          <div class="class-desc">Un chatbot responde preguntas. Un agente razona, consulta sistemas, recuerda contexto y decide qué hacer. Construís el agente de Lumina completo: lee el email, busca el pedido, decide si responder o escalar, y actúa.</div>
+          <div class="class-tags"><span class="ctag lumina-tag">🏠 Lumina: agente post-venta completo</span><span class="ctag">n8n AI Agent</span><span class="ctag">Memoria</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>17</span></div>
+        <div class="class-content">
+          <div class="class-title">Adaptá el agente de Lumina a tu propio negocio</div>
+          <div class="class-desc">Taller práctico: tomás el sistema completo de Lumina y lo ajustás a tu contexto. Cambiás las fuentes de datos, el tono de respuesta, los criterios de escalada y los canales de notificación.</div>
+          <div class="class-tags"><span class="ctag">Workshop guiado</span><span class="ctag">Personalización</span><span class="ctag">Tu negocio real</span></div>
+        </div>
+        <div class="class-type type-caso">Workshop</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>18</span></div>
+        <div class="class-content">
+          <div class="class-title">¿Cuánto vale lo que construiste? Medir el ROI real</div>
+          <div class="class-desc">Cómo calcular cuántas horas y pesos ahorra tu automatización por semana. Dashboard de impacto en Google Sheets. Cómo presentárselo a un socio, jefe o cliente para justificar la inversión.</div>
+          <div class="class-tags"><span class="ctag">ROI</span><span class="ctag">Dashboard</span><span class="ctag">Presentación ejecutiva</span></div>
+        </div>
+        <div class="class-type type-practica">Práctica</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>19</span></div>
+        <div class="class-content">
+          <div class="class-title">Taller final: pulir, testear y preparar la demo</div>
+          <div class="class-desc">Clase-taller con acompañamiento directo. Cada alumno termina su proyecto, resuelve los últimos bloqueos y prepara la presentación del Demo Day. Revisión de flujos, métricas y narrativa.</div>
+          <div class="class-tags"><span class="ctag">Workshop</span><span class="ctag">Feedback</span><span class="ctag">Preparación Demo</span></div>
+        </div>
+        <div class="class-type type-caso">Workshop</div>
+      </div>
+      <div class="class-row">
+        <div class="class-week">Sem<span>20</span></div>
+        <div class="class-content">
+          <div class="class-title">🎓 Demo Day: tu negocio automatizado, en vivo</div>
+          <div class="class-desc">Cada alumno presenta su sistema en funcionamiento ante el grupo. Demo en vivo, métricas de impacto real y aprendizajes. No es una presentación de diapositivas — es una demo del sistema funcionando.</div>
+          <div class="class-tags"><span class="ctag">Demo en vivo</span><span class="ctag">Métricas reales</span><span class="ctag">Graduación</span></div>
+        </div>
+        <div class="class-type type-proyecto">Demo Day</div>
+      </div>
+    </div>
+    <div class="project-banner">
+      <span class="pb-icon">🎓</span>
+      <div>
+        <div class="pb-label">Proyecto Final — Demo Day</div>
+        <div class="pb-title">Tu negocio automatizado con IA, funcionando en vivo</div>
+        <div class="pb-desc">Presentás un agente o sistema de automatización real, adaptado a tu negocio, con métricas de impacto medibles. No un ejercicio académico — algo que ya está corriendo mientras hablás.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /plan -->
+
+<!-- HERRAMIENTAS -->
+<div id="stack" style="background: var(--ink); border-top:1px solid #111;">
+<div class="s-wrap">
+  <div class="s-label" style="color:#f0a070">Stack tecnológico</div>
+  <h2 class="s-title" style="color:#fff">Todas las herramientas<br>son gratuitas o freemium</h2>
+  <p class="s-sub" style="color:rgba(255,255,255,0.45)">No necesitás invertir en software para aprender ni para empezar. Todos tienen plan gratuito generoso.</p>
+  <div class="tools-grid reveal">
+    <div class="tool-item">
+      <span class="tool-emoji">🔄</span>
+      <div class="tool-name">n8n</div>
+      <div class="tool-desc">Motor principal. Flujos visuales, poderosos y gratuitos en cloud. Acá vivé el agente de Lumina.</div>
+      <span class="tool-tag">Core Tool</span>
+    </div>
+    <div class="tool-item">
+      <span class="tool-emoji">⚡</span>
+      <div class="tool-name">Make</div>
+      <div class="tool-desc">Automatizaciones orientadas a negocios. Ideal para conectar apps del mundo empresarial sin código.</div>
+      <span class="tool-tag">Automatización</span>
+    </div>
+    <div class="tool-item">
+      <span class="tool-emoji">🤖</span>
+      <div class="tool-name">ChatGPT / GPT-4o</div>
+      <div class="tool-desc">El cerebro del agente. Clasifica mensajes, genera respuestas y detecta casos críticos.</div>
+      <span class="tool-tag">IA Principal</span>
+    </div>
+    <div class="tool-item">
+      <span class="tool-emoji">💎</span>
+      <div class="tool-name">Google Gemini</div>
+      <div class="tool-desc">Alternativa gratuita de Google. API con plan free generoso — perfecto para arrancar sin costo.</div>
+      <span class="tool-tag">IA Gratuita</span>
+    </div>
+    <div class="tool-item">
+      <span class="tool-emoji">📋</span>
+      <div class="tool-name">Airtable</div>
+      <div class="tool-desc">La base de datos de Lumina: pedidos, clientes, consultas y resultados del agente.</div>
+      <span class="tool-tag">Base de datos</span>
+    </div>
+    <div class="tool-item">
+      <span class="tool-emoji">📊</span>
+      <div class="tool-name">Google Sheets</div>
+      <div class="tool-desc">Dashboard de métricas y ROI. La hoja donde ves cuánto tiempo y dinero ahorraste.</div>
+      <span class="tool-tag">Dashboard</span>
+    </div>
+    <div class="tool-item">
+      <span class="tool-emoji">📬</span>
+      <div class="tool-name">Gmail + WhatsApp</div>
+      <div class="tool-desc">Los canales donde llegan las consultas. El agente los lee, clasifica y responde automáticamente.</div>
+      <span class="tool-tag">Canales</span>
+    </div>
+    <div class="tool-item">
+      <span class="tool-emoji">💬</span>
+      <div class="tool-name">Slack + Zapier</div>
+      <div class="tool-desc">Notificaciones al equipo y flujos simples de entrada. La capa de comunicación interna del sistema.</div>
+      <span class="tool-tag">Notificaciones</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">AI Automation · Diplomatura</div>
+  <div>20 semanas · 40 horas · 100% no-code · Sin requisitos previos</div>
+  <div style="font-size:0.78rem; color: var(--muted2);">Programa diseñado para dueños de negocio y profesionales en actividad</div>
+</footer>
+
+<script>
+function goTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+const navSections = ['hero','quien','caso','plan','stack'];
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let active = 0;
+  navSections.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 160) active = i;
+  });
+  navLinks.forEach((l, i) => l.classList.toggle('active', i === active));
+});
+function switchBlock(id, btn) {
+  document.querySelectorAll('.block-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.block-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+reveals.forEach(r => obs.observe(r));
+</script>
+</body>
+</html>

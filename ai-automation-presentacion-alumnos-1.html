@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Automation — Presentación</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0e12;--surface:#16181f;--surface2:#1e2028;
+  --orange:#d4500a;--orange2:#ff7a30;--orange-dim:#2e1808;
+  --green:#1a6b4a;--green2:#40cc80;
+  --blue:#2d52a0;--purple:#6b4dff;
+  --white:#ffffff;--off:#e8e6df;--muted:#888880;--muted2:#b0afa8;
+  --font-head:'Syne',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--white);font-family:var(--font-body)}
+
+/* ── SLIDES ── */
+.deck{width:100vw;height:100vh;position:relative}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  padding:5vh 6vw;
+  opacity:0;pointer-events:none;
+  transition:opacity 0s;
+}
+.slide.active{opacity:1;pointer-events:all}
+.slide.entering .reveal{animation:fadeUp 0.55s cubic-bezier(.22,1,.36,1) both}
+.slide.entering .reveal:nth-child(1){animation-delay:.05s}
+.slide.entering .reveal:nth-child(2){animation-delay:.15s}
+.slide.entering .reveal:nth-child(3){animation-delay:.25s}
+.slide.entering .reveal:nth-child(4){animation-delay:.35s}
+.slide.entering .reveal:nth-child(5){animation-delay:.42s}
+.slide.entering .reveal:nth-child(6){animation-delay:.48s}
+.slide.entering .reveal:nth-child(7){animation-delay:.54s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;bottom:3vh;left:50%;transform:translateX(-50%);
+  z-index:100;
+  display:flex;align-items:center;gap:1rem;
+  background:rgba(22,24,31,0.9);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:100px;padding:.5rem 1.2rem;
+  backdrop-filter:blur(12px);
+}
+.nav-btn{
+  width:36px;height:36px;border-radius:50%;
+  border:none;cursor:pointer;background:var(--surface2);
+  color:var(--muted2);font-size:1rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.nav-btn:hover{background:var(--orange);color:#fff}
+.nav-counter{font-size:.8rem;color:var(--muted2);min-width:48px;text-align:center;font-family:var(--font-head)}
+.nav-counter span{color:var(--white);font-weight:700}
+.dots{display:flex;gap:.4rem}
+.dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,0.2);cursor:pointer;
+  transition:all .25s;
+}
+.dot.active{background:var(--orange);width:18px;border-radius:3px}
+
+/* ── TYPOGRAPHY ── */
+.eyebrow{
+  font-size:clamp(.65rem,.9vw,.8rem);font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--orange);display:flex;align-items:center;gap:.5rem;margin-bottom:1.2vh;
+}
+.eyebrow::before{content:'';width:20px;height:2px;background:var(--orange);border-radius:1px}
+h1{font-family:var(--font-head);font-size:clamp(2.2rem,5.5vw,5rem);font-weight:800;line-height:1.0;letter-spacing:-.03em}
+h2{font-family:var(--font-head);font-size:clamp(1.6rem,3.2vw,3rem);font-weight:800;line-height:1.05;letter-spacing:-.025em}
+h3{font-family:var(--font-head);font-size:clamp(1rem,1.5vw,1.4rem);font-weight:700;letter-spacing:-.02em}
+.sub{color:var(--muted2);font-size:clamp(.85rem,1.1vw,1rem);line-height:1.7;font-weight:300}
+.accent{color:var(--orange)}
+.green{color:var(--green2)}
+
+/* ── SHAPES ── */
+.box{background:var(--surface);border-radius:16px;border:1px solid rgba(255,255,255,.06);padding:1.5rem}
+.box-bar{border-top:3px solid var(--orange)}
+.box-bar-green{border-top:3px solid var(--green)}
+.box-bar-blue{border-top:3px solid var(--blue)}
+.box-bar-purple{border-top:3px solid var(--purple)}
+
+.tag{
+  display:inline-block;padding:.22rem .7rem;border-radius:100px;
+  font-size:.7rem;font-weight:600;letter-spacing:.04em;
+  background:var(--surface2);color:var(--muted2);
+  border:1px solid rgba(255,255,255,.08);
+}
+.stat-num{font-family:var(--font-head);font-size:clamp(2rem,4vw,3.8rem);font-weight:800;color:var(--white);line-height:1}
+
+/* icon circle */
+.ic{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-head);font-weight:800;font-size:.85rem;
+  flex-shrink:0;
+}
+.ic-o{background:rgba(212,80,10,.18);color:var(--orange)}
+.ic-g{background:rgba(26,107,74,.2);color:var(--green2)}
+.ic-b{background:rgba(45,82,160,.2);color:#7aa4ff}
+.ic-p{background:rgba(107,77,255,.2);color:#a98bff}
+
+/* step row */
+.step{
+  display:grid;grid-template-columns:52px 1fr;gap:1rem;align-items:start;
+  background:var(--surface);border-radius:14px;
+  border:1px solid rgba(255,255,255,.06);padding:1rem 1.2rem;
+}
+.step-num{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-head);font-weight:800;font-size:.95rem;
+  background:var(--orange);color:#fff;flex-shrink:0;
+}
+.step-num.g{background:var(--green)}
+.step-num.b{background:var(--blue)}
+.step-num.p{background:var(--purple)}
+.step p{font-size:.82rem;color:var(--muted2);margin-top:.2rem;line-height:1.55}
+.step-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem}
+
+/* grid helpers */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}
+.g32{display:grid;grid-template-columns:1.3fr 1fr;gap:1.2rem}
+.flex{display:flex;gap:1rem;flex-wrap:wrap}
+
+/* ── PROGRESS BAR ── */
+.progress{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--orange),var(--orange2));
+  transition:width .4s cubic-bezier(.22,1,.36,1);
+  z-index:200;
+}
+
+/* ── SPECIFIC SLIDE STYLES ── */
+/* S1 - Cover */
+#s1{background:var(--bg);justify-content:center}
+#s1 .cover-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:center;height:100%}
+#s1 .badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--orange-dim);border:1px solid rgba(212,80,10,.3);
+  border-radius:100px;padding:.3rem .9rem;
+  font-size:.72rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:1.8vh;
+}
+#s1 .cover-right{
+  background:var(--surface);border-radius:24px;
+  border:1px solid rgba(255,255,255,.07);
+  padding:2.5rem;display:flex;flex-direction:column;gap:1rem;
+}
+#s1 .cr-item{
+  background:var(--surface2);border-radius:14px;
+  border:1px solid rgba(255,255,255,.06);
+  padding:1rem 1.2rem;
+  display:flex;align-items:center;gap:1rem;
+}
+#s1 .cr-item strong{font-size:.95rem;font-weight:600;display:block;margin-bottom:.1rem}
+#s1 .cr-item span{font-size:.78rem;color:var(--muted2)}
+.stat-mini{
+  display:flex;gap:1rem;margin-top:.5rem;
+}
+.stat-mini-item{background:var(--surface2);border-radius:12px;flex:1;padding:.8rem .9rem;border:1px solid rgba(255,255,255,.05)}
+.stat-mini-item .n{font-family:var(--font-head);font-size:1.6rem;font-weight:800;color:var(--white);line-height:1}
+.stat-mini-item .l{font-size:.7rem;color:var(--muted2);margin-top:.2rem}
+
+/* S2 - Problema */
+#s2 .pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:2vh;flex:1}
+#s2 .pain{
+  background:var(--surface);border-radius:14px;
+  border:1px solid rgba(255,255,255,.06);
+  border-left:3px solid var(--orange);
+  padding:1.1rem 1.2rem;
+}
+#s2 .pain h3{font-size:clamp(.85rem,1.2vw,1rem);margin-bottom:.35rem}
+#s2 .pain p{font-size:.8rem;color:var(--muted2);line-height:1.6}
+#s2 .punch{
+  margin-top:2vh;text-align:center;
+  color:var(--orange);font-weight:600;font-size:clamp(.9rem,1.2vw,1.05rem);
+  padding:1rem;background:var(--orange-dim);border-radius:12px;
+  border:1px solid rgba(212,80,10,.25);
+}
+
+/* S5 — Lumina before/after */
+#s5 .ba{display:grid;grid-template-columns:1fr 1fr;gap:1rem;flex:1;margin-top:2vh}
+#s5 .before{background:rgba(34,20,16,.8);border:1px solid rgba(153,48,8,.3);border-radius:16px;padding:1.3rem}
+#s5 .after{background:rgba(16,32,24,.8);border:1px solid rgba(26,107,74,.35);border-radius:16px;padding:1.3rem}
+#s5 .ba-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem}
+#s5 .before .ba-label{color:rgba(255,112,64,.9)}
+#s5 .after .ba-label{color:var(--green2)}
+#s5 .ba-item{
+  display:flex;align-items:flex-start;gap:.7rem;
+  padding:.45rem 0;border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:.82rem;color:var(--muted2);line-height:1.5;
+}
+#s5 .ba-item:last-child{border-bottom:none}
+#s5 .x{color:rgba(255,80,40,.8);font-weight:700;flex-shrink:0}
+#s5 .v{color:var(--green2);font-weight:700;flex-shrink:0}
+
+/* S7 — Resultados */
+#s7{justify-content:center}
+#s7 .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;margin-top:2vh}
+#s7 .result-card{
+  background:var(--surface);border-radius:20px;
+  border:1px solid rgba(255,255,255,.07);border-top:4px solid var(--green);
+  padding:2rem 2.2rem;
+}
+#s7 .result-card .label{font-size:.78rem;color:var(--muted2);margin-top:.5rem;line-height:1.5}
+
+/* S8 — Bloques */
+#s8 .bloque{
+  background:var(--surface);border-radius:14px;
+  border:1px solid rgba(255,255,255,.06);
+  padding:1rem 1.3rem;
+  display:grid;grid-template-columns:80px 1fr auto;
+  align-items:center;gap:1rem;
+}
+#s8 .bl-num{
+  border-radius:10px;padding:.45rem .6rem;
+  font-family:var(--font-head);font-size:.78rem;font-weight:700;
+  text-align:center;
+}
+#s8 .bl-num small{display:block;font-size:.65rem;font-weight:400;opacity:.7;margin-top:.15rem}
+#s8 .bl-title{font-family:var(--font-head);font-size:.95rem;font-weight:700;margin-bottom:.2rem}
+#s8 .bl-desc{font-size:.78rem;color:var(--muted2);line-height:1.55}
+#s8 .bl-tag-wrap{display:flex;gap:.3rem;flex-wrap:wrap;justify-content:flex-end;min-width:180px}
+
+/* S12 — Demo Day */
+#s12{background:var(--bg);overflow:hidden}
+#s12 .dd-layout{display:grid;grid-template-columns:1fr 1fr;height:100%;gap:0}
+#s12 .dd-left{padding:5vh 4vw;display:flex;flex-direction:column;justify-content:center}
+#s12 .dd-right{
+  background:var(--surface);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border-left:1px solid rgba(255,255,255,.06);
+}
+#s12 .dd-big{font-family:var(--font-head);font-size:clamp(4rem,9vw,8rem);font-weight:800;line-height:.9;letter-spacing:-.03em}
+#s12 .check-item{display:flex;align-items:center;gap:.8rem;padding:.55rem 0;font-size:.9rem;color:var(--off)}
+#s12 .check-dot{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--green);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:700;flex-shrink:0;
+}
+
+/* S13 — CTA */
+#s13{background:var(--bg);justify-content:center;align-items:center;text-align:center}
+#s13 .cta-specs{display:flex;gap:1rem;justify-content:center;margin:3vh 0}
+#s13 .spec{
+  background:var(--surface);border-radius:14px;
+  border:1px solid rgba(255,255,255,.07);
+  padding:.9rem 1.4rem;min-width:120px;
+}
+#s13 .spec .n{font-family:var(--font-head);font-size:1.6rem;font-weight:800;line-height:1}
+#s13 .spec .l{font-size:.72rem;color:var(--muted2);margin-top:.2rem}
+#s13 .cta-btn{
+  padding:1.1rem 3.5rem;border-radius:16px;
+  background:var(--orange);color:#fff;
+  font-family:var(--font-head);font-size:1.2rem;font-weight:700;
+  border:none;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:0 0 40px rgba(212,80,10,.35);
+  display:inline-block;
+}
+#s13 .cta-btn:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(212,80,10,.5)}
+
+/* dots bg */
+.dots-bg{
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:28px 28px;pointer-events:none;z-index:0;
+}
+.slide>*:not(.dots-bg){position:relative;z-index:1}
+
+/* keyboard hint */
+.kb-hint{
+  position:fixed;bottom:3vh;right:2vw;
+  font-size:.68rem;color:var(--muted);
+  display:flex;align-items:center;gap:.4rem;
+  opacity:.5;
+}
+kbd{
+  background:var(--surface2);border:1px solid rgba(255,255,255,.1);
+  border-radius:4px;padding:.15rem .4rem;font-size:.68rem;
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="deck" id="deck">
+
+<!-- ══ SLIDE 1 — PORTADA ══ -->
+<div class="slide" id="s1">
+  <div class="cover-grid">
+    <div>
+      <div class="badge reveal">🎓 Diplomatura · 20 semanas · No-Code</div>
+      <h1 class="reveal">Tu negocio<br>trabajando<br>mientras<br><span class="accent">dormís.</span></h1>
+      <p class="sub reveal" style="margin-top:2vh;max-width:480px">20 clases para profesionales que quieren aplicar IA en su negocio — sin código, sin programadores, con resultados desde la semana 1.</p>
+      <div class="stat-mini reveal" style="margin-top:2.5vh">
+        <div class="stat-mini-item"><div class="n">20</div><div class="l">clases de 2hs</div></div>
+        <div class="stat-mini-item"><div class="n">40<span style="font-size:.9rem;color:var(--orange)">hs</span></div><div class="l">en total</div></div>
+        <div class="stat-mini-item"><div class="n" style="font-size:1.2rem">Cero</div><div class="l">requisitos previos</div></div>
+      </div>
+    </div>
+    <div class="cover-right reveal">
+      <div class="cr-item">
+        <div class="ic ic-o">$</div>
+        <div><strong>Reducí costos operativos</strong><span>Tareas manuales que hoy cuestan horas y dinero</span></div>
+      </div>
+      <div class="cr-item">
+        <div class="ic ic-g">24/7</div>
+        <div><strong>Respondé 24/7 sin personal extra</strong><span>Atención automática, sin sumar sueldos</span></div>
+      </div>
+      <div class="cr-item">
+        <div class="ic ic-b">ROI</div>
+        <div><strong>Resultados medibles desde semana 1</strong><span>Cada clase = algo aplicable a tu negocio</span></div>
+      </div>
+      <div class="cr-item">
+        <div class="ic ic-p">IA</div>
+        <div><strong>Agentes que trabajan por vos</strong><span>Clasifican, responden y escalan solos</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2 — EL PROBLEMA ══ -->
+<div class="slide" id="s2">
+  <div class="dots-bg"></div>
+  <div class="eyebrow reveal">El punto de partida</div>
+  <h2 class="reveal">¿Cuántas horas de tu semana<br>se van en tareas repetitivas?</h2>
+  <div class="pain-grid reveal">
+    <div class="pain">
+      <h3>Responder los mismos emails</h3>
+      <p>Una y otra vez. Las mismas preguntas. A mano. Todos los días.</p>
+    </div>
+    <div class="pain">
+      <h3>Armar reportes manualmente</h3>
+      <p>Copiar datos de un sistema a otro. Cada semana. Sin parar.</p>
+    </div>
+    <div class="pain">
+      <h3>Perseguir aprobaciones</h3>
+      <p>Mensajes que esperan respuesta por días. Procesos que se frenan.</p>
+    </div>
+    <div class="pain">
+      <h3>Cargar datos en sistemas</h3>
+      <p>Formularios, planillas, CRMs. Trabajo repetitivo que no agrega valor.</p>
+    </div>
+    <div class="pain">
+      <h3>Buscar información dispersa</h3>
+      <p>En emails, chats, carpetas. Todo en lugares distintos. Todo por separado.</p>
+    </div>
+    <div class="pain">
+      <h3>Pagar trabajo automatizable</h3>
+      <p>Tiempo de personas talentosas en tareas que una máquina puede hacer.</p>
+    </div>
+  </div>
+  <div class="punch reveal">La buena noticia: el 80% de estas tareas se pueden automatizar hoy, sin programar nada.</div>
+</div>
+
+<!-- ══ SLIDE 3 — EL PROGRAMA ══ -->
+<div class="slide" id="s3">
+  <div class="eyebrow reveal">El programa</div>
+  <h2 class="reveal">No es un curso de tecnología.<br>Es un curso para <span class="accent">hacer rendir tu negocio.</span></h2>
+  <div class="g2 reveal" style="margin-top:2.5vh;flex:1">
+    <div class="box box-bar" style="display:flex;flex-direction:column;gap:.9rem">
+      <h3 style="color:var(--orange);font-size:.9rem;letter-spacing:.08em;text-transform:uppercase">Lo que vas a lograr</h3>
+      <div style="display:flex;flex-direction:column;gap:.65rem">
+        <div style="display:flex;align-items:center;gap:.7rem;font-size:.88rem;color:var(--off)">
+          <div style="width:26px;height:26px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;color:#fff">1</div>
+          Automatizar tareas repetitivas sin tocar código
+        </div>
+        <div style="display:flex;align-items:center;gap:.7rem;font-size:.88rem;color:var(--off)">
+          <div style="width:26px;height:26px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;color:#fff">2</div>
+          Integrar IA en tus procesos actuales
+        </div>
+        <div style="display:flex;align-items:center;gap:.7rem;font-size:.88rem;color:var(--off)">
+          <div style="width:26px;height:26px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;color:#fff">3</div>
+          Atender clientes 24/7 sin sumar personal
+        </div>
+        <div style="display:flex;align-items:center;gap:.7rem;font-size:.88rem;color:var(--off)">
+          <div style="width:26px;height:26px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;color:#fff">4</div>
+          Generar reportes y documentos automáticamente
+        </div>
+        <div style="display:flex;align-items:center;gap:.7rem;font-size:.88rem;color:var(--off)">
+          <div style="width:26px;height:26px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;color:#fff">5</div>
+          Medir el ROI real de cada automatización
+        </div>
+        <div style="display:flex;align-items:center;gap:.7rem;font-size:.88rem;color:var(--off)">
+          <div style="width:26px;height:26px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;color:#fff">6</div>
+          Presentar el impacto a tu equipo o inversores
+        </div>
+      </div>
+    </div>
+    <div class="box box-bar" style="border-top-color:rgba(255,255,255,.15);display:flex;flex-direction:column;gap:.8rem">
+      <h3 style="color:var(--muted2);font-size:.9rem;letter-spacing:.08em;text-transform:uppercase">Formato</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem">
+        <div style="background:var(--surface2);border-radius:12px;padding:.9rem;border:1px solid rgba(255,255,255,.06)">
+          <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;color:var(--white)">1<span style="font-size:.9rem;color:var(--orange)">x</span></div>
+          <div style="font-size:.72rem;color:var(--muted2);margin-top:.2rem">clase por semana<br>en vivo · 2 horas</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:12px;padding:.9rem;border:1px solid rgba(255,255,255,.06)">
+          <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;color:var(--white)">20<span style="font-size:.9rem;color:var(--orange)">sem</span></div>
+          <div style="font-size:.72rem;color:var(--muted2);margin-top:.2rem">part-time<br>compatible con trabajo</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:12px;padding:.9rem;border:1px solid rgba(255,255,255,.06)">
+          <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;color:var(--white)">4</div>
+          <div style="font-size:.72rem;color:var(--muted2);margin-top:.2rem">proyectos reales<br>uno por bloque</div>
+        </div>
+        <div style="background:rgba(26,107,74,.12);border-radius:12px;padding:.9rem;border:1px solid rgba(26,107,74,.2)">
+          <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;color:var(--green2)">0</div>
+          <div style="font-size:.72rem;color:var(--muted2);margin-top:.2rem">requisitos<br>previos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4 — PARA QUIÉN ══ -->
+<div class="slide" id="s4">
+  <div class="eyebrow reveal">¿Para quién es?</div>
+  <h2 class="reveal">Para quien tiene un negocio<br>y quiere que <span class="accent">rinda más.</span></h2>
+  <div class="g3 reveal" style="margin-top:2.5vh;flex:1">
+    <div class="box box-bar" style="display:flex;flex-direction:column;gap:.8rem">
+      <div class="ic ic-o" style="width:52px;height:52px;border-radius:14px;font-size:1.1rem">DN</div>
+      <h3>Dueños de negocio</h3>
+      <p class="sub">Tiendas online, servicios, locales. Querés que las partes repetitivas funcionen solas y dedicarte a lo que importa.</p>
+      <div class="flex" style="margin-top:.5rem">
+        <span class="tag">E-commerce</span>
+        <span class="tag">Servicios</span>
+        <span class="tag">Retail</span>
+      </div>
+    </div>
+    <div class="box" style="border-top:3px solid var(--green);display:flex;flex-direction:column;gap:.8rem">
+      <div class="ic ic-g" style="width:52px;height:52px;border-radius:14px;font-size:1.1rem">FC</div>
+      <h3>Freelancers y consultores</h3>
+      <p class="sub">Vendés tu tiempo. Con automatización podés atender más clientes, entregar más rápido y cobrar más.</p>
+      <div class="flex" style="margin-top:.5rem">
+        <span class="tag">Diseño</span>
+        <span class="tag">Consultoría</span>
+        <span class="tag">Marketing</span>
+      </div>
+    </div>
+    <div class="box box-bar-blue" style="display:flex;flex-direction:column;gap:.8rem">
+      <div class="ic ic-b" style="width:52px;height:52px;border-radius:14px;font-size:1.1rem">PR</div>
+      <h3>Profesionales en empresas</h3>
+      <p class="sub">Marketing, ventas, operaciones. Tenés procesos manuales que consumen horas y querés resolverlos sin IT.</p>
+      <div class="flex" style="margin-top:.5rem">
+        <span class="tag">Sales</span>
+        <span class="tag">Ops</span>
+        <span class="tag">Marketing</span>
+      </div>
+    </div>
+  </div>
+  <div class="reveal" style="margin-top:2vh;text-align:center;font-size:.88rem;color:var(--orange);padding:.8rem;background:var(--orange-dim);border-radius:10px;border:1px solid rgba(212,80,10,.25)">
+    No necesitás saber programar · No necesitás entender de tecnología · Solo necesitás querer mejorar tu negocio
+  </div>
+</div>
+
+<!-- ══ SLIDE 5 — LUMINA ANTES/DESPUÉS ══ -->
+<div class="slide" id="s5">
+  <div class="eyebrow reveal">El caso del programa</div>
+  <h2 class="reveal">Lumina — de 4 horas manuales<br>a un <span class="accent">agente que trabaja solo.</span></h2>
+  <div class="ba reveal">
+    <div class="before">
+      <div class="ba-label">⚠ Antes — Sin automatización</div>
+      <div class="ba-item"><span class="x">✕</span>Un empleado revisa 80 emails por día a mano</div>
+      <div class="ba-item"><span class="x">✕</span>Busca el pedido en otro sistema por separado</div>
+      <div class="ba-item"><span class="x">✕</span>Copia y pega respuestas de un Word</div>
+      <div class="ba-item"><span class="x">✕</span>Fines de semana y feriados: nadie responde</div>
+      <div class="ba-item"><span class="x">✕</span>3 días de demora promedio en responder</div>
+      <div class="ba-item"><span class="x">✕</span>Sin registro de qué se respondió ni cuándo</div>
+    </div>
+    <div class="after">
+      <div class="ba-label">✅ Después — Con el agente de IA</div>
+      <div class="ba-item"><span class="v">✓</span>El agente clasifica cada consulta en segundos</div>
+      <div class="ba-item"><span class="v">✓</span>Consulta el estado del pedido automáticamente</div>
+      <div class="ba-item"><span class="v">✓</span>Responde con información personalizada y real</div>
+      <div class="ba-item"><span class="v">✓</span>Funciona 24/7 sin supervisión</div>
+      <div class="ba-item"><span class="v">✓</span>Tiempo de respuesta: menos de 2 minutos</div>
+      <div class="ba-item"><span class="v">✓</span>Todo registrado con métricas de atención</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 6 — ARQUITECTURA DEL AGENTE ══ -->
+<div class="slide" id="s6">
+  <div class="eyebrow reveal">Caso Lumina — cómo funciona el agente</div>
+  <h2 class="reveal">6 pasos. Completamente automático.</h2>
+  <div class="g2 reveal" style="margin-top:2vh;flex:1;align-content:start">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h3>Llega un email o WhatsApp</h3>
+        <p>El flujo se activa solo al recibir la consulta. Sin revisión manual.</p>
+        <div class="step-tags"><span class="tag">Gmail</span><span class="tag">WhatsApp</span><span class="tag">n8n</span></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h3>La IA clasifica el mensaje</h3>
+        <p>ChatGPT decide: ¿consulta simple o reclamo complejo?</p>
+        <div class="step-tags"><span class="tag">ChatGPT</span><span class="tag">Gemini</span><span class="tag">Prompt</span></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num g">3</div>
+      <div>
+        <h3>Busca el pedido automáticamente</h3>
+        <p>Consulta el estado real en Airtable usando el email del cliente.</p>
+        <div class="step-tags"><span class="tag">Airtable</span><span class="tag">Google Sheets</span></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num g">4</div>
+      <div>
+        <h3>Redacta respuesta personalizada</h3>
+        <p>La IA escribe con los datos reales del pedido y el tono de la marca.</p>
+        <div class="step-tags"><span class="tag">ChatGPT</span><span class="tag">Gmail Send</span></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num b">5</div>
+      <div>
+        <h3>Escala lo que no puede resolver</h3>
+        <p>Reclamos van al equipo con historial completo y sugerencia.</p>
+        <div class="step-tags"><span class="tag">Slack</span><span class="tag">Email interno</span></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num p">6</div>
+      <div>
+        <h3>Registra y genera métricas</h3>
+        <p>Dashboard muestra horas ahorradas y ROI automáticamente.</p>
+        <div class="step-tags"><span class="tag">Airtable</span><span class="tag">Dashboard</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 7 — RESULTADOS ══ -->
+<div class="slide" id="s7">
+  <div class="dots-bg"></div>
+  <div class="eyebrow reveal">Resultado de Lumina</div>
+  <h2 class="reveal">De 4 horas manuales diarias<br>a <span class="green">15 minutos de supervisión.</span></h2>
+  <div class="results-grid reveal">
+    <div class="result-card">
+      <div class="stat-num">92%</div>
+      <div class="label">de consultas resueltas automáticamente<br>sin intervención humana</div>
+    </div>
+    <div class="result-card">
+      <div class="stat-num">&lt;2<span style="font-size:1.5rem;color:var(--muted2)">min</span></div>
+      <div class="label">tiempo de respuesta promedio<br>antes eran 3 días</div>
+    </div>
+    <div class="result-card">
+      <div class="stat-num">24/7</div>
+      <div class="label">atención sin personal extra<br>fines de semana y feriados incluidos</div>
+    </div>
+    <div class="result-card">
+      <div class="stat-num">4h<span style="font-size:1.5rem;color:var(--orange)">→15m</span></div>
+      <div class="label">de trabajo manual diario<br>el equipo se dedica a lo que importa</div>
+    </div>
+  </div>
+  <div class="reveal" style="margin-top:2vh;text-align:center;font-size:.9rem;color:var(--orange);font-weight:600">
+    Y lo vas a construir vos — paso a paso, durante las 20 semanas del programa.
+  </div>
+</div>
+
+<!-- ══ SLIDE 8 — PLAN DE ESTUDIOS ══ -->
+<div class="slide" id="s8">
+  <div class="eyebrow reveal">Plan de estudios</div>
+  <h2 class="reveal">4 bloques. 20 clases. Un resultado por semana.</h2>
+  <div style="display:flex;flex-direction:column;gap:.7rem;margin-top:2.5vh;flex:1;justify-content:center" class="reveal">
+    <div class="bloque">
+      <div class="bl-num" style="background:rgba(212,80,10,.15);color:var(--orange)">B1<small>Sem 1–5</small></div>
+      <div><div class="bl-title">Fundamentos</div><div class="bl-desc">Identificar qué automatizar, prompting para negocios, organizar datos, primer flujo con Zapier.</div></div>
+      <div class="bl-tag-wrap"><span class="tag">Zapier</span><span class="tag">Airtable</span><span class="tag">ChatGPT</span></div>
+    </div>
+    <div class="bloque">
+      <div class="bl-num" style="background:rgba(26,107,74,.15);color:var(--green2)">B2<small>Sem 6–10</small></div>
+      <div><div class="bl-title">Automatizaciones</div><div class="bl-desc">n8n y Make de forma visual. Conectar Gmail, WhatsApp, Slack y Notion sin una línea de código.</div></div>
+      <div class="bl-tag-wrap"><span class="tag">n8n</span><span class="tag">Make</span><span class="tag">Gmail</span><span class="tag">Slack</span></div>
+    </div>
+    <div class="bloque">
+      <div class="bl-num" style="background:rgba(45,82,160,.15);color:#7aa4ff">B3<small>Sem 11–15</small></div>
+      <div><div class="bl-title">IA en tu negocio</div><div class="bl-desc">Integrar ChatGPT/Gemini en los flujos. Clasificar, responder y detectar clientes insatisfechos.</div></div>
+      <div class="bl-tag-wrap"><span class="tag">OpenAI</span><span class="tag">Gemini</span><span class="tag">n8n AI</span></div>
+    </div>
+    <div class="bloque">
+      <div class="bl-num" style="background:rgba(107,77,255,.15);color:#a98bff">B4<small>Sem 16–20</small></div>
+      <div><div class="bl-title">Agente completo</div><div class="bl-desc">Construir el agente post-venta. Adaptarlo a tu negocio. Medir ROI. Demo Day final en vivo.</div></div>
+      <div class="bl-tag-wrap"><span class="tag">n8n Agente</span><span class="tag">Dashboard</span><span class="tag">Demo Day</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 9 — HERRAMIENTAS ══ -->
+<div class="slide" id="s9">
+  <div class="eyebrow reveal">Stack tecnológico</div>
+  <h2 class="reveal">Todas gratuitas o con <span class="accent">plan free generoso.</span></h2>
+  <div class="g4 reveal" style="margin-top:2.5vh;flex:1;align-content:start">
+    <div class="box box-bar" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="ic ic-o">n8n</div>
+        <span style="background:rgba(26,107,74,.15);color:var(--green2);padding:.15rem .5rem;border-radius:100px;font-size:.68rem;font-weight:700">FREE</span>
+      </div>
+      <h3 style="font-size:.9rem">Motor de automatizaciones</h3>
+      <p class="sub" style="font-size:.78rem">Flujos 100% visuales. El cerebro del sistema.</p>
+    </div>
+    <div class="box box-bar" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="ic ic-o">Make</div>
+        <span style="background:rgba(212,80,10,.12);color:var(--orange);padding:.15rem .5rem;border-radius:100px;font-size:.68rem;font-weight:700">FREE</span>
+      </div>
+      <h3 style="font-size:.9rem">Automatizaciones de negocio</h3>
+      <p class="sub" style="font-size:.78rem">Conecta apps empresariales sin código.</p>
+    </div>
+    <div class="box box-bar-blue" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="ic ic-b">GPT</div>
+        <span style="background:rgba(45,82,160,.15);color:#7aa4ff;padding:.15rem .5rem;border-radius:100px;font-size:.68rem;font-weight:700">FREE</span>
+      </div>
+      <h3 style="font-size:.9rem">ChatGPT / GPT-4o</h3>
+      <p class="sub" style="font-size:.78rem">Clasifica, redacta y decide dentro del flujo.</p>
+    </div>
+    <div class="box box-bar-blue" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="ic ic-b">GEM</div>
+        <span style="background:rgba(26,107,74,.15);color:var(--green2);padding:.15rem .5rem;border-radius:100px;font-size:.68rem;font-weight:700">FREE</span>
+      </div>
+      <h3 style="font-size:.9rem">Google Gemini</h3>
+      <p class="sub" style="font-size:.78rem">Alternativa gratuita. Plan free muy generoso.</p>
+    </div>
+    <div class="box box-bar-green" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="ic ic-g">AIR</div>
+        <span style="background:rgba(26,107,74,.15);color:var(--green2);padding:.15rem .5rem;border-radius:100px;font-size:.68rem;font-weight:700">FREE</span>
+      </div>
+      <h3 style="font-size:.9rem">Airtable</h3>
+      <p class="sub" style="font-size:.78rem">Base de datos visual. Sin SQL ni código.</p>
+    </div>
+    <div class="box box-bar-green" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="ic ic-g">SHT</div>
+        <span style="background:rgba(26,107,74,.15);color:var(--green2);padding:.15rem .5rem;border-radius:100px;font-size:.68rem;font-weight:700">FREE</span>
+      </div>
+      <h3 style="font-size:.9rem">Google Sheets</h3>
+      <p class="sub" style="font-size:.78rem">Dashboard de métricas y cálculo de ROI.</p>
+    </div>
+    <div class="box" style="display:flex;flex-direction:column;gap:.5rem;border-top:3px solid var(--muted)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="ic" style="background:rgba(255,255,255,.06);color:var(--muted2)">MAIL</div>
+        <span style="background:rgba(26,107,74,.15);color:var(--green2);padding:.15rem .5rem;border-radius:100px;font-size:.68rem;font-weight:700">FREE</span>
+      </div>
+      <h3 style="font-size:.9rem">Gmail + WhatsApp</h3>
+      <p class="sub" style="font-size:.78rem">Canales de entrada del agente de atención.</p>
+    </div>
+    <div class="box" style="display:flex;flex-direction:column;gap:.5rem;border-top:3px solid var(--muted)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="ic" style="background:rgba(255,255,255,.06);color:var(--muted2)">SLK</div>
+        <span style="background:rgba(212,80,10,.1);color:var(--orange);padding:.15rem .5rem;border-radius:100px;font-size:.68rem;font-weight:700">FREE</span>
+      </div>
+      <h3 style="font-size:.9rem">Slack + Zapier</h3>
+      <p class="sub" style="font-size:.78rem">Notificaciones al equipo y flujos simples.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 10 — METODOLOGÍA ══ -->
+<div class="slide" id="s10">
+  <div class="eyebrow reveal">Metodología</div>
+  <h2 class="reveal">Cada clase = un resultado<br>aplicable esa misma <span class="accent">semana.</span></h2>
+  <div class="g4 reveal" style="margin-top:2.5vh;flex:1;align-content:start">
+    <div class="box box-bar" style="display:flex;flex-direction:column;gap:.8rem;text-align:center;align-items:center">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1.2rem;font-weight:800;color:#fff">01</div>
+      <h3>Clase en vivo</h3>
+      <p class="sub">1 vez por semana · 2 horas · Conceptos + práctica guiada en el momento</p>
+    </div>
+    <div class="box box-bar" style="display:flex;flex-direction:column;gap:.8rem;text-align:center;align-items:center">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1.2rem;font-weight:800;color:#fff">02</div>
+      <h3>Ejercicio práctico</h3>
+      <p class="sub">Aplicás lo visto a tu negocio en el momento. Sin tarea teórica.</p>
+    </div>
+    <div class="box box-bar-green" style="display:flex;flex-direction:column;gap:.8rem;text-align:center;align-items:center">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1.2rem;font-weight:800;color:#fff">03</div>
+      <h3>Entregable</h3>
+      <p class="sub">Al final de cada bloque, algo real funcionando en tu negocio.</p>
+    </div>
+    <div class="box box-bar-purple" style="display:flex;flex-direction:column;gap:.8rem;text-align:center;align-items:center">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1.2rem;font-weight:800;color:#fff">04</div>
+      <h3>Demo Day</h3>
+      <p class="sub">Semana 20 · Presentás tu sistema funcionando en vivo.</p>
+    </div>
+  </div>
+  <div class="reveal" style="margin-top:2vh;background:var(--surface);border-radius:14px;border-left:4px solid var(--orange);padding:1rem 1.4rem;font-size:.88rem;color:var(--off);line-height:1.6">
+    El caso Lumina recorre las 20 semanas como hilo conductor. Cada clase avanza un paso más — y al final lo adaptás a tu propio negocio.
+  </div>
+</div>
+
+<!-- ══ SLIDE 11 — ENTREGABLES ══ -->
+<div class="slide" id="s11">
+  <div class="eyebrow reveal">¿Qué te llevás?</div>
+  <h2 class="reveal">Al terminar tenés <span class="accent">4 cosas funcionando</span><br>en tu negocio.</h2>
+  <div style="display:flex;flex-direction:column;gap:.8rem;margin-top:2.5vh;flex:1;justify-content:center" class="reveal">
+    <div style="background:var(--surface);border-radius:14px;border:1px solid rgba(255,255,255,.07);border-left:4px solid var(--orange);padding:1rem 1.4rem;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:1rem">
+      <div style="background:rgba(212,80,10,.15);border-radius:10px;padding:.5rem;text-align:center;font-family:var(--font-head);font-weight:800;font-size:.85rem;color:var(--orange)">E1</div>
+      <div><div style="font-weight:600;margin-bottom:.2rem">Mapa de automatización de tu negocio</div><div style="font-size:.8rem;color:var(--muted2)">Los 3 procesos de mayor impacto con ROI estimado y plan de priorización.</div></div>
+      <span class="tag">Bloque 1</span>
+    </div>
+    <div style="background:var(--surface);border-radius:14px;border:1px solid rgba(255,255,255,.07);border-left:4px solid var(--green);padding:1rem 1.4rem;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:1rem">
+      <div style="background:rgba(26,107,74,.15);border-radius:10px;padding:.5rem;text-align:center;font-family:var(--font-head);font-weight:800;font-size:.85rem;color:var(--green2)">E2</div>
+      <div><div style="font-weight:600;margin-bottom:.2rem">Pipeline operativo funcionando</div><div style="font-size:.8rem;color:var(--muted2)">Un flujo en n8n o Make que conecta herramientas reales de tu negocio.</div></div>
+      <span class="tag">Bloque 2</span>
+    </div>
+    <div style="background:var(--surface);border-radius:14px;border:1px solid rgba(255,255,255,.07);border-left:4px solid var(--blue);padding:1rem 1.4rem;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:1rem">
+      <div style="background:rgba(45,82,160,.15);border-radius:10px;padding:.5rem;text-align:center;font-family:var(--font-head);font-weight:800;font-size:.85rem;color:#7aa4ff">E3</div>
+      <div><div style="font-weight:600;margin-bottom:.2rem">Sistema de atención con IA</div><div style="font-size:.8rem;color:var(--muted2)">Recibe mensajes, clasifica con IA, responde los simples y escala los complejos.</div></div>
+      <span class="tag">Bloque 3</span>
+    </div>
+    <div style="background:var(--surface);border-radius:14px;border:1px solid rgba(255,255,255,.07);border-left:4px solid var(--purple);padding:1rem 1.4rem;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:1rem">
+      <div style="background:rgba(107,77,255,.15);border-radius:10px;padding:.5rem;text-align:center;font-family:var(--font-head);font-weight:800;font-size:.85rem;color:#a98bff">E4</div>
+      <div><div style="font-weight:600;margin-bottom:.2rem">Demo Day — sistema completo en vivo</div><div style="font-size:.8rem;color:var(--muted2)">Tu agente funcionando, adaptado a tu negocio, con métricas de impacto reales.</div></div>
+      <span class="tag">Bloque 4</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 12 — DEMO DAY ══ -->
+<div class="slide" id="s12">
+  <div class="dd-layout">
+    <div class="dd-left">
+      <div class="eyebrow reveal">Semana 20 — el cierre</div>
+      <h1 class="reveal" style="font-size:clamp(2.5rem,5vw,4.5rem)">Demo<br>Day.</h1>
+      <p class="sub reveal" style="margin-top:2vh;font-size:clamp(.85rem,1.1vw,1rem)">No es una presentación de diapositivas.<br>Es una demo del sistema funcionando.<br>Ante el grupo, en tiempo real.</p>
+      <div style="margin-top:3vh;display:flex;flex-direction:column" class="reveal">
+        <div class="check-item"><div class="check-dot">V</div>Sistema conectado y activo durante la demo</div>
+        <div class="check-item"><div class="check-dot">V</div>Métricas reales de impacto en tu negocio</div>
+        <div class="check-item"><div class="check-dot">V</div>Aprendizajes y próximos pasos</div>
+      </div>
+    </div>
+    <div class="dd-right reveal">
+      <div class="dd-big"><span class="accent">DEMO</span><br>DAY</div>
+      <p style="color:var(--muted);font-size:.9rem;margin-top:1.5rem">Semana 20 de 20</p>
+      <p style="color:var(--muted2);font-size:.85rem;margin-top:.5rem">Tu sistema. Funcionando. En vivo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 13 — CTA ══ -->
+<div class="slide" id="s13">
+  <div class="dots-bg"></div>
+  <div class="eyebrow reveal" style="justify-content:center">AI Automation · Diplomatura</div>
+  <h1 class="reveal" style="font-size:clamp(2.2rem,5vw,4.2rem);text-align:center;margin-top:2vh">
+    ¿Listo para que<br>tu negocio trabaje<br><span class="accent">por vos?</span>
+  </h1>
+  <p class="sub reveal" style="text-align:center;font-size:clamp(.85rem,1.1vw,1.05rem);margin-top:1.5vh">
+    20 semanas. 40 horas. Sin código. Con resultados reales.
+  </p>
+  <div class="cta-specs reveal">
+    <div class="spec"><div class="n">1<span style="font-size:.9rem;color:var(--orange)">x</span></div><div class="l">clase/semana</div></div>
+    <div class="spec"><div class="n">40<span style="font-size:.9rem;color:var(--orange)">hs</span></div><div class="l">en total</div></div>
+    <div class="spec"><div class="n" style="color:var(--green2)">0</div><div class="l">requisitos</div></div>
+    <div class="spec"><div class="n" style="font-size:1.1rem;line-height:1.3">Caso<br>Lumina</div><div class="l">hilo conductor</div></div>
+  </div>
+  <div class="reveal">
+    <button class="cta-btn">Inscribite al programa →</button>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<div class="nav">
+  <button class="nav-btn" id="btnPrev">←</button>
+  <div class="dots" id="dots"></div>
+  <div class="nav-counter"><span id="cur">1</span> / <span id="tot">13</span></div>
+  <button class="nav-btn" id="btnNext">→</button>
+</div>
+
+<div class="kb-hint"><kbd>←</kbd><kbd>→</kbd> para navegar · <kbd>F</kbd> pantalla completa</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const dotsEl = document.getElementById('dots');
+const curEl = document.getElementById('cur');
+const progress = document.getElementById('progress');
+const TOTAL = slides.length;
+let current = 0;
+
+// Build dots
+slides.forEach((_,i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===0?' active':'');
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+});
+document.getElementById('tot').textContent = TOTAL;
+
+function goTo(n) {
+  if (n < 0 || n >= TOTAL) return;
+  slides[current].classList.remove('active','entering');
+  current = n;
+  const s = slides[current];
+  s.classList.add('active');
+  // trigger animation
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => s.classList.add('entering'));
+  });
+  // update UI
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===current));
+  curEl.textContent = current + 1;
+  progress.style.width = ((current + 1) / TOTAL * 100) + '%';
+}
+
+document.getElementById('btnNext').addEventListener('click', () => goTo(current + 1));
+document.getElementById('btnPrev').addEventListener('click', () => goTo(current - 1));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goTo(current+1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); goTo(current-1); }
+  if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+
+// Touch swipe
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) goTo(dx < 0 ? current+1 : current-1);
+}, {passive:true});
+
+// Init
+goTo(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+{
+  "name": "Lumina — Clase 07 — Flujo Condicional con IF",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": { "item": [{ "mode": "everyMinute" }] },
+        "filters": {},
+        "options": { "downloadAttachments": false }
+      },
+      "id": "c7-node-001",
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "credentials": {
+        "gmailOAuth2": { "id": "REEMPLAZAR", "name": "Gmail — Lumina" }
+      }
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            { "name": "email_cliente",   "value": "={{ $json.from.value[0].address }}" },
+            { "name": "nombre_cliente",  "value": "={{ $json.from.value[0].name || $json.from.value[0].address }}" },
+            { "name": "asunto",          "value": "={{ $json.subject }}" },
+            { "name": "mensaje",         "value": "={{ ($json.text || '').slice(0, 1000) }}" },
+            { "name": "fecha",           "value": "={{ $now.format('YYYY-MM-DD HH:mm') }}" },
+            { "name": "canal",           "value": "Email" },
+            { "name": "estado",          "value": "Abierta" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c7-node-002",
+      "name": "Set: Extraer campos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": { "__rl": true, "value": "YOUR_SPREADSHEET_ID", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "Consultas", "mode": "name" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Cliente": "={{ $json.email_cliente }}",
+            "Nombre":        "={{ $json.nombre_cliente }}",
+            "Asunto":        "={{ $json.asunto }}",
+            "Mensaje":       "={{ $json.mensaje }}",
+            "Fecha":         "={{ $json.fecha }}",
+            "Canal":         "={{ $json.canal }}",
+            "Estado":        "={{ $json.estado }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "c7-node-003",
+      "name": "Sheets: Registrar consulta",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [680, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": { "id": "REEMPLAZAR", "name": "Google Sheets — Lumina" }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "cond-reclamo-1",
+              "leftValue": "={{ $json.mensaje }}",
+              "rightValue": "reclamo",
+              "operator": { "type": "string", "operation": "contains" }
+            },
+            {
+              "id": "cond-reclamo-2",
+              "leftValue": "={{ $json.mensaje }}",
+              "rightValue": "dañado",
+              "operator": { "type": "string", "operation": "contains" }
+            },
+            {
+              "id": "cond-reclamo-3",
+              "leftValue": "={{ $json.mensaje }}",
+              "rightValue": "roto",
+              "operator": { "type": "string", "operation": "contains" }
+            },
+            {
+              "id": "cond-reclamo-4",
+              "leftValue": "={{ $json.mensaje }}",
+              "rightValue": "devolver",
+              "operator": { "type": "string", "operation": "contains" }
+            },
+            {
+              "id": "cond-reclamo-5",
+              "leftValue": "={{ $json.mensaje }}",
+              "rightValue": "devolución",
+              "operator": { "type": "string", "operation": "contains" }
+            },
+            {
+              "id": "cond-reclamo-6",
+              "leftValue": "={{ $json.mensaje }}",
+              "rightValue": "cambio",
+              "operator": { "type": "string", "operation": "contains" }
+            }
+          ],
+          "combinator": "any"
+        }
+      },
+      "id": "c7-node-004",
+      "name": "IF: ¿Es un reclamo?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [900, 300],
+      "notes": "Detecta palabras clave de reclamo en el mensaje. TRUE = reclamo, FALSE = consulta normal."
+    },
+    {
+      "parameters": {
+        "sendTo": "equipo@lumina.com",
+        "subject": "=⚠️ Posible reclamo — {{ $json.email_cliente }}",
+        "emailType": "text",
+        "message": "=Se recibió un mensaje que puede ser un reclamo.\n\nDe: {{ $json.email_cliente }}\nFecha: {{ $json.fecha }}\nAsunto: {{ $json.asunto }}\n\nMensaje:\n{{ $json.mensaje }}\n\n---\nResponder a la brevedad. Este mensaje fue generado automáticamente.",
+        "options": {}
+      },
+      "id": "c7-node-005",
+      "name": "Gmail: Alerta al equipo",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [1120, 180],
+      "credentials": {
+        "gmailOAuth2": { "id": "REEMPLAZAR", "name": "Gmail — Lumina" }
+      },
+      "notes": "Rama TRUE (reclamo): alerta al equipo"
+    },
+    {
+      "parameters": {
+        "resource": "sheet",
+        "operation": "lookupRows",
+        "documentId": { "__rl": true, "value": "YOUR_SPREADSHEET_ID", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "Pedidos", "mode": "name" },
+        "lookupColumn": "Email Cliente",
+        "lookupValue": "={{ $json.email_cliente }}",
+        "options": { "returnAllMatches": false }
+      },
+      "id": "c7-node-006",
+      "name": "Sheets: Buscar pedido",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1120, 420],
+      "credentials": {
+        "googleSheetsOAuth2Api": { "id": "REEMPLAZAR", "name": "Google Sheets — Lumina" }
+      },
+      "notes": "Rama FALSE (consulta): buscar el pedido del cliente"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Set: Extraer campos').item.json.email_cliente }}",
+        "subject": "=Re: {{ $('Set: Extraer campos').item.json.asunto }}",
+        "emailType": "text",
+        "message": "=Hola {{ $('Set: Extraer campos').item.json.nombre_cliente }},\n\nGracias por escribirnos.\n\nTu pedido #{{ $json['ID'] }} está actualmente en estado: {{ $json['Estado'] }}.\nFecha estimada de entrega: {{ $json['Fecha Estimada'] }}.\n{{ $json['Tracking'] ? 'Número de seguimiento: ' + $json['Tracking'] + '.' : 'El número de seguimiento estará disponible cuando el pedido sea despachado.' }}\n\nEquipo Lumina",
+        "options": {}
+      },
+      "id": "c7-node-007",
+      "name": "Gmail: Responder al cliente",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [1340, 420],
+      "credentials": {
+        "gmailOAuth2": { "id": "REEMPLAZAR", "name": "Gmail — Lumina" }
+      }
+    }
+  ],
+  "connections": {
+    "Gmail Trigger":        { "main": [[{ "node": "Set: Extraer campos",     "type": "main", "index": 0 }]] },
+    "Set: Extraer campos":  { "main": [[{ "node": "Sheets: Registrar consulta","type": "main", "index": 0 }]] },
+    "Sheets: Registrar consulta": { "main": [[{ "node": "IF: ¿Es un reclamo?", "type": "main", "index": 0 }]] },
+    "IF: ¿Es un reclamo?":  {
+      "main": [
+        [{ "node": "Gmail: Alerta al equipo",  "type": "main", "index": 0 }],
+        [{ "node": "Sheets: Buscar pedido",    "type": "main", "index": 0 }]
+      ]
+    },
+    "Sheets: Buscar pedido": { "main": [[{ "node": "Gmail: Responder al cliente", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": { "templateId": "lumina-clase-07", "description": "Extiende el workflow de la clase 06 agregando lógica condicional: detecta reclamos por palabras clave y toma caminos distintos." },
+  "id": "lumina-clase-07-v1",
+  "tags": [{ "name": "lumina" }, { "name": "clase-07" }, { "name": "bloque-2" }]
+}

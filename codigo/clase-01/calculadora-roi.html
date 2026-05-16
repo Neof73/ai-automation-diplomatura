@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de ROI — AI Automation Diplomatura</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #1a1a1a; }
+    .container { max-width: 720px; margin: 40px auto; padding: 0 20px; }
+    h1 { font-size: 1.6rem; margin-bottom: 4px; color: #1a1a1a; }
+    .subtitle { color: #666; margin-bottom: 32px; font-size: 0.95rem; }
+    .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; margin-bottom: 20px; }
+    .field { margin-bottom: 16px; }
+    label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 6px; color: #333; }
+    label .hint { font-weight: 400; color: #888; margin-left: 6px; }
+    input[type="number"] { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; transition: border-color 0.2s; }
+    input[type="number"]:focus { outline: none; border-color: #4f46e5; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .results { background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 12px; padding: 24px; color: white; }
+    .results h2 { color: rgba(255,255,255,0.8); margin-bottom: 20px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .result-item label { color: rgba(255,255,255,0.7); font-size: 0.8rem; display: block; margin-bottom: 4px; }
+    .result-item .value { font-size: 1.5rem; font-weight: 700; }
+    .result-item.highlight .value { font-size: 2rem; }
+    .roi-bar { margin-top: 20px; }
+    .roi-bar label { color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-bottom: 8px; display: block; }
+    .bar-track { background: rgba(255,255,255,0.2); border-radius: 100px; height: 8px; overflow: hidden; }
+    .bar-fill { background: #a3e635; height: 100%; border-radius: 100px; transition: width 0.5s ease; }
+    .interpretation { margin-top: 16px; padding: 12px 16px; background: rgba(255,255,255,0.15); border-radius: 8px; font-size: 0.9rem; line-height: 1.5; }
+    footer { text-align: center; color: #aaa; font-size: 0.8rem; margin-top: 24px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Calculadora de ROI de Automatización</h1>
+  <p class="subtitle">AI Automation Diplomatura — Clase 01</p>
+
+  <div class="card">
+    <h2>El proceso actual (manual)</h2>
+    <div class="row">
+      <div class="field">
+        <label>Tiempo por ejecución <span class="hint">(minutos)</span></label>
+        <input type="number" id="tiempo" value="5" min="0.1" step="0.5" oninput="calcular()">
+      </div>
+      <div class="field">
+        <label>Frecuencia <span class="hint">(veces por semana)</span></label>
+        <input type="number" id="frecuencia" value="80" min="1" oninput="calcular()">
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Costo hora de trabajo <span class="hint">(ARS)</span></label>
+        <input type="number" id="costoHora" value="2500" min="1" step="100" oninput="calcular()">
+      </div>
+      <div class="field">
+        <label>% que automatiza el sistema</label>
+        <input type="number" id="porcentajeAuto" value="75" min="0" max="100" oninput="calcular()">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>El sistema de automatización</h2>
+    <div class="row">
+      <div class="field">
+        <label>Costo mensual del sistema <span class="hint">(ARS)</span></label>
+        <input type="number" id="costoSistema" value="15000" min="0" step="500" oninput="calcular()">
+      </div>
+      <div class="field">
+        <label>Horas de mantenimiento/mes</label>
+        <input type="number" id="horasMantenimiento" value="2" min="0" step="0.5" oninput="calcular()">
+      </div>
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <h2>Resultado del cálculo</h2>
+    <div class="result-grid">
+      <div class="result-item">
+        <label>Horas ahorradas / semana</label>
+        <div class="value" id="horasAhorradas">—</div>
+      </div>
+      <div class="result-item">
+        <label>Valor semanal ahorrado</label>
+        <div class="value" id="valorSemanal">—</div>
+      </div>
+      <div class="result-item">
+        <label>Valor anual ahorrado</label>
+        <div class="value" id="valorAnual">—</div>
+      </div>
+      <div class="result-item">
+        <label>Costo anual del sistema</label>
+        <div class="value" id="costoAnual">—</div>
+      </div>
+      <div class="result-item highlight" style="grid-column: 1 / -1;">
+        <label>ROI anual</label>
+        <div class="value" id="roi">—</div>
+      </div>
+    </div>
+    <div class="roi-bar">
+      <label id="barLabel">Retorno sobre inversión</label>
+      <div class="bar-track"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+    </div>
+    <div class="interpretation" id="interpretation"></div>
+  </div>
+
+  <footer>AI Automation Diplomatura — UTN · Clase 01</footer>
+</div>
+
+<script>
+function fmt(n) {
+  return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n);
+}
+
+function calcular() {
+  const tiempo       = parseFloat(document.getElementById('tiempo').value) || 0;
+  const frecuencia   = parseFloat(document.getElementById('frecuencia').value) || 0;
+  const costoHora    = parseFloat(document.getElementById('costoHora').value) || 0;
+  const pctAuto      = parseFloat(document.getElementById('porcentajeAuto').value) / 100 || 0;
+  const costoMes     = parseFloat(document.getElementById('costoSistema').value) || 0;
+  const horasMant    = parseFloat(document.getElementById('horasMantenimiento').value) || 0;
+
+  const horasSemana  = (tiempo * frecuencia) / 60;
+  const horasAhorradas = horasSemana * pctAuto;
+  const valorSemanal = horasAhorradas * costoHora;
+  const valorAnual   = valorSemanal * 52;
+  const costoAnual   = (costoMes + horasMant * costoHora) * 12;
+  const gananciaAnual = valorAnual - costoAnual;
+  const roi          = costoAnual > 0 ? (gananciaAnual / costoAnual) * 100 : 0;
+
+  document.getElementById('horasAhorradas').textContent = horasAhorradas.toFixed(1) + ' hs';
+  document.getElementById('valorSemanal').textContent   = fmt(valorSemanal);
+  document.getElementById('valorAnual').textContent     = fmt(valorAnual);
+  document.getElementById('costoAnual').textContent     = fmt(costoAnual);
+  document.getElementById('roi').textContent            = roi.toFixed(0) + '%';
+
+  const barPct = Math.min(roi / 10, 100);
+  document.getElementById('barFill').style.width = Math.max(barPct, 0) + '%';
+
+  let msg = '';
+  if (roi < 0)        msg = '⚠️ El sistema cuesta más de lo que ahorra. Reducir el costo o aumentar el porcentaje de automatización.';
+  else if (roi < 50)  msg = '📊 ROI positivo pero bajo. Evaluar si hay más procesos que automatizar para mejorar el retorno.';
+  else if (roi < 200) msg = '✅ ROI positivo. El sistema genera más valor del que cuesta. Buen punto de partida.';
+  else if (roi < 500) msg = '🚀 ROI excelente. El sistema genera entre 2× y 5× su costo. Prioridad alta de implementación.';
+  else                msg = '⭐ ROI excepcional. Por cada peso invertido el sistema devuelve ' + (roi/100).toFixed(1) + ' pesos. Implementar de inmediato.';
+
+  document.getElementById('interpretation').textContent = msg;
+}
+
+calcular();
+</script>
+</body>
+</html>

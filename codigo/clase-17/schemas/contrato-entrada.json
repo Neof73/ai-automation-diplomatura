@@ -1,0 +1,45 @@
+{
+  "_descripcion": "Formato JSON que el orquestador envía a cada agente trabajador. Todos los agentes deben esperar recibir este objeto.",
+  "_version": "1.0",
+
+  "id_conversacion": {
+    "tipo": "string",
+    "descripcion": "Identificador único de esta conversación/solicitud",
+    "ejemplo": "conv_abc123xyz"
+  },
+  "mensaje_original": {
+    "tipo": "string",
+    "descripcion": "El texto completo del mensaje del cliente tal como llegó",
+    "ejemplo": "Hola, quería saber cuándo llega mi pedido del viernes pasado."
+  },
+  "email_cliente": {
+    "tipo": "string",
+    "descripcion": "Email del cliente desde el que escribió",
+    "ejemplo": "marta.luna@gmail.com"
+  },
+  "nombre_cliente": {
+    "tipo": "string",
+    "descripcion": "Nombre del cliente si está disponible, o null",
+    "ejemplo": "Marta Luna"
+  },
+  "tipo_detectado": {
+    "tipo": "string",
+    "descripcion": "Clasificación del orquestador: POST_VENTA | PRODUCTO | RECLAMO | OTRO",
+    "ejemplo": "POST_VENTA"
+  },
+  "fecha": {
+    "tipo": "string",
+    "descripcion": "Fecha y hora en formato YYYY-MM-DD HH:mm",
+    "ejemplo": "2025-05-16 09:14"
+  },
+  "canal": {
+    "tipo": "string",
+    "descripcion": "Canal por donde llegó el mensaje",
+    "ejemplo": "Email"
+  },
+  "contexto_previo": {
+    "tipo": "array",
+    "descripcion": "Historial de mensajes anteriores del mismo cliente (puede estar vacío)",
+    "ejemplo": []
+  }
+}

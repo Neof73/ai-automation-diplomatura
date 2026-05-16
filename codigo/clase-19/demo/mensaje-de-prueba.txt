@@ -1,0 +1,33 @@
+================================================================================
+MENSAJE DE PRUEBA PRINCIPAL — Demo Day
+================================================================================
+
+PARA USAR EN LA DEMO:
+Copiar el texto dentro de las líneas y enviarlo por email (o WhatsApp/formulario
+según el trigger del flujo) durante la presentación.
+
+PERSONALIZAR antes del Demo Day:
+- Cambiar "marta.luna@gmail.com" por el email real que el trigger escucha
+- Verificar que el número de pedido (4821) existe en la planilla
+- Probar 3 veces antes de la presentación para asegurarse de que funciona
+
+================================================================================
+
+Hola!
+
+Soy Marta Luna, quería consultarles cuándo llega mi pedido.
+Lo hice el 11 de mayo y el número es el 4821.
+
+¿Tienen el número de seguimiento?
+
+Muchas gracias,
+Marta
+
+================================================================================
+RESULTADO ESPERADO DE ESTE MENSAJE:
+- Clasificación: CONSULTA (sentimiento neutro, urgencia baja)
+- Acción: buscar el pedido 4821 en Google Sheets
+- Respuesta automática al cliente con el estado y tracking
+- Registro en la hoja "Consultas"
+- NO genera alerta al equipo (es una consulta normal)
+================================================================================

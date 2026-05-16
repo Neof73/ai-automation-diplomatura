@@ -1,0 +1,13 @@
+id,nombre,categoria,precio,talles_disponibles,colores_disponibles,composicion,peso_gramos,instrucciones_lavado,origen,stock_total,activo
+P001,Remera Básica,Tops,3500,"XS,S,M,L,XL","Blanco,Negro,Gris,Azul marino",100% algodón peinado,180,Lavar a 30°C vuelta del revés,Argentina,245,true
+P002,Remera Slim,Tops,4200,"XS,S,M,L","Blanco,Negro,Gris,Rosa,Azul",100% algodón peinado combed,180,Lavar a 30°C suave,Argentina,187,true
+P003,Remera Urban,Tops,4800,"S,M,L,XL","Negro,Gris,Blanco,Azul,Verde",85% algodón 15% elastano,220,Lavar a 30°C no centrifugar fuerte,Argentina,134,true
+P004,Pantalón Chino,Pantalones,8900,"36,38,40,42,44","Beige,Negro,Blanco,Verde oliva",98% algodón 2% elastano,450,Lavar a 40°C planchar a temperatura media,Argentina,98,true
+P005,Short Oxford,Pantalones,5500,"30,32,34,36,38","Azul,Negro,Beige,Verde,Blanco",100% algodón Oxford,320,Lavar a 30°C,Argentina,76,true
+P006,Campera Denim,Outerwear,18500,"S,M,L,XL","Azul claro,Azul oscuro,Negro,Blanco",100% algodón denim 12oz,850,Lavar a 30°C separado de colores,Argentina,42,true
+P007,Vestido Lino,Vestidos,12000,"XS,S,M,L","Crudo,Rosa,Azul cielo,Blanco",55% lino 45% algodón,280,Lavar a mano o delicado 30°C no secar en secadora,India,63,true
+P008,Sweater Oversize,Sweaters,9800,"S/M,L/XL","Crudo,Gris,Negro,Verde salvia",60% algodón 40% acrílico,480,Lavar a mano 30°C plano,China,55,true
+P009,Bermuda Cargo,Pantalones,7200,"S,M,L,XL","Verde militar,Negro,Beige",100% algodón ripstop,380,Lavar a 40°C,Bangladesh,89,true
+P010,Top Canalé,Tops,3200,"XS,S,M,L","Blanco,Negro,Rosa,Camel,Verde","95% algodón canalé, 5% elastano",140,Lavar a 30°C,Argentina,203,true
+P011,Jean Skinny,Pantalones,14500,"36,38,40,42","Azul stonewash,Negro,Gris",98% algodón 2% elastano,680,Lavar vuelta del revés 30°C,Bangladesh,71,true
+P012,Blazer Lino,Outerwear,22000,"XS,S,M,L,XL","Beige,Blanco,Azul marino",70% lino 30% viscosa,420,Solo limpieza profesional,India,28,true

@@ -1,0 +1,16 @@
+id,mensaje,sentimiento_esperado,urgencia_esperada,requiere_humano,descripcion
+1,¿Cuándo llega mi pedido?,neutro,baja,false,Consulta simple sin carga emocional
+2,Hola! Sigo esperando mi pedido y ya pasaron 5 días. ¿Está todo bien?,negativo_leve,media,false,Leve impaciencia pero sin amenaza
+3,Me llegó el producto equivocado. Pedí talle M y me mandaron XL.,negativo_leve,media,true,Reclamo claro pero sin urgencia crítica
+4,La caja llegó completamente destruida y el producto tiene manchas. Quiero la devolución inmediata.,negativo_fuerte,alta,true,Frustración activa con solicitud urgente
+5,Ya es la TERCERA vez que escribo y nadie me responde. Llevo 10 días esperando.,negativo_fuerte,alta,true,Múltiples contactos previos sin respuesta
+6,Si no recibo respuesta antes del viernes inicio una denuncia en defensa del consumidor.,critico,critica,true,Amenaza de acción formal con fecha límite
+7,Excelente producto y entrega rápida. Muy recomendable.,positivo,baja,false,Comentario positivo
+8,Hola buenas tardes ¿podrían decirme el estado de mi pedido 4821?,neutro,baja,false,Consulta educada y sin urgencia
+9,Necesito que mi pedido llegue sí o sí antes del sábado porque es un regalo de cumpleaños.,negativo_leve,alta,true,Urgencia real por evento inminente
+10,Esto es una vergüenza. Publiqué en Instagram lo que me pasó y tengo miles de seguidores.,critico,critica,true,Amenaza de exposición pública ya ejecutada
+11,Me preocupa un poco que ya pasó la fecha estimada pero entiendo que puede haber demoras.,neutro,media,false,Consulta empática sin frustración
+12,¿Tienen talles plus? No encontré en el sitio.,neutro,baja,false,Consulta de catálogo
+13,El producto llegó perfecto pero la caja estaba un poco golpeada. No hay problema pero quería avisar.,positivo,baja,false,Feedback constructivo positivo
+14,Quiero que me devuelvan el dinero YA. Llevo un mes con este problema y nadie me da solución.,critico,critica,true,Reclamo crítico con historial largo
+15,Perdón que moleste pero quisiera saber si hay novedades sobre mi pedido.,neutro,baja,false,Consulta muy educada sin urgencia

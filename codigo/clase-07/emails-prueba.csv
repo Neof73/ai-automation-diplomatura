@@ -1,0 +1,11 @@
+id,email,nombre,asunto,mensaje,rama_esperada,descripcion
+1,test.reclamo1@gmail.com,Test Reclamo 1,Producto dañado,Me llegó el producto completamente dañado. La remera tiene una costura rota. Quiero el cambio.,TRUE,Contiene "dañado"
+2,test.reclamo2@gmail.com,Test Reclamo 2,Quiero devolver,Necesito hacer una devolución. El producto no me quedó bien.,TRUE,Contiene "devolver" y "devolución"
+3,test.reclamo3@gmail.com,Test Reclamo 3,Producto roto,La caja llegó rota y el producto tiene manchas. Inaceptable.,TRUE,Contiene "roto"
+4,test.reclamo4@gmail.com,Test Reclamo 4,Cambio de talle,Compré talle M pero necesito talle S. ¿Puedo hacer el cambio?,TRUE,Contiene "cambio"
+5,test.reclamo5@gmail.com,Test Reclamo 5,Reclamo formal,Quiero hacer un reclamo formal. El pedido no llegó hace 15 días.,TRUE,Contiene "reclamo"
+6,marta.luna@gmail.com,Marta Luna,Estado de mi pedido,Hola! Quería saber cuándo llega mi pedido del martes pasado.,FALSE,Consulta normal sin palabras clave
+7,test.consulta2@gmail.com,Test Consulta 2,¿Tienen talle XS?,Hola quería saber si la remera slim viene en talle XS.,FALSE,Pregunta de producto sin palabras clave
+8,test.consulta3@gmail.com,Test Consulta 3,Tracking no aparece,El número de tracking que me dieron no funciona en el sitio del correo.,FALSE,Consulta - tracking no es palabra clave de reclamo
+9,test.limite1@gmail.com,Test Límite 1,La caja llegó aplastada,La caja estaba completamente aplastada cuando llegó. El producto parece estar bien.,FALSE (debería ser TRUE),"Caso límite: debería detectarse como reclamo pero ""aplastada"" no está en la lista"
+10,test.limite2@gmail.com,Test Límite 2,No es lo que pedí,Me mandaron algo completamente diferente a lo que pedí. Color y modelo equivocados.,FALSE (debería ser TRUE),Caso límite: la IA de la clase 11 lo resolvería correctamente

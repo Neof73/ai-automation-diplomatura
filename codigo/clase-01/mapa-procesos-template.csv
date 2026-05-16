@@ -1,0 +1,15 @@
+id,proceso,descripcion,responsable,tiempo_por_ejecucion_min,frecuencia_semanal,total_horas_semana,costo_hora_ars,costo_semanal_ars,repetitivo,usa_datos_estructurados,tiene_reglas_claras,volumen_alto,puntaje_automatizacion,prioridad
+1,[nombre del proceso],[descripcion breve de qué se hace],[cargo de quien lo hace],0,0,0,0,0,true/false,true/false,true/false,true/false,0,ALTA/MEDIA/BAJA
+2,[nombre del proceso],[descripcion breve de qué se hace],[cargo de quien lo hace],0,0,0,0,0,true/false,true/false,true/false,true/false,0,ALTA/MEDIA/BAJA
+3,[nombre del proceso],[descripcion breve de qué se hace],[cargo de quien lo hace],0,0,0,0,0,true/false,true/false,true/false,true/false,0,ALTA/MEDIA/BAJA
+4,[nombre del proceso],[descripcion breve de qué se hace],[cargo de quien lo hace],0,0,0,0,0,true/false,true/false,true/false,true/false,0,ALTA/MEDIA/BAJA
+5,[nombre del proceso],[descripcion breve de qué se hace],[cargo de quien lo hace],0,0,0,0,0,true/false,true/false,true/false,true/false,0,ALTA/MEDIA/BAJA
+
+INSTRUCCIONES:
+- tiempo_por_ejecucion_min: cronometrar el tiempo real, no estimar
+- frecuencia_semanal: contar cuántas veces ocurrió la última semana
+- total_horas_semana: (tiempo_min × frecuencia) / 60
+- costo_semanal_ars: total_horas_semana × costo_hora_ars
+- Criterios booleanos: true = sí cumple, false = no cumple
+- puntaje_automatizacion: suma de los 4 criterios booleanos (0 a 4)
+- prioridad: ALTA (puntaje 3-4), MEDIA (puntaje 2), BAJA (puntaje 0-1)

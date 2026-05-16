@@ -1,0 +1,156 @@
+{
+  "name": "Lumina — Clase 06 — Captura de Emails a Google Sheets",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [{ "mode": "everyMinute" }]
+        },
+        "filters": {},
+        "options": {
+          "downloadAttachments": false
+        }
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REEMPLAZAR_CON_TU_CREDENTIAL_ID",
+          "name": "Gmail — Lumina"
+        }
+      },
+      "notes": "CONFIGURAR: conectar el Gmail de Lumina en las credenciales"
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "email_cliente",
+              "value": "={{ $json.from.value[0].address }}"
+            },
+            {
+              "name": "nombre_cliente",
+              "value": "={{ $json.from.value[0].name || $json.from.value[0].address }}"
+            },
+            {
+              "name": "asunto",
+              "value": "={{ $json.subject }}"
+            },
+            {
+              "name": "mensaje",
+              "value": "={{ ($json.text || '').slice(0, 1000) }}"
+            },
+            {
+              "name": "fecha",
+              "value": "={{ $now.format('YYYY-MM-DD HH:mm') }}"
+            },
+            {
+              "name": "canal",
+              "value": "Email"
+            },
+            {
+              "name": "estado",
+              "value": "Abierta"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000002",
+      "name": "Set: Extraer campos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 300],
+      "notes": "Extrae los campos relevantes del email y los normaliza"
+    },
+    {
+      "parameters": {
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Consultas",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Cliente": "={{ $json.email_cliente }}",
+            "Nombre": "={{ $json.nombre_cliente }}",
+            "Asunto": "={{ $json.asunto }}",
+            "Mensaje": "={{ $json.mensaje }}",
+            "Fecha": "={{ $json.fecha }}",
+            "Canal": "={{ $json.canal }}",
+            "Estado": "={{ $json.estado }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000003",
+      "name": "Google Sheets: Registrar consulta",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [680, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REEMPLAZAR_CON_TU_CREDENTIAL_ID",
+          "name": "Google Sheets — Lumina"
+        }
+      },
+      "notes": "CONFIGURAR: reemplazar YOUR_SPREADSHEET_ID con el ID real de la planilla"
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set: Extraer campos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set: Extraer campos": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets: Registrar consulta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "meta": {
+    "templateId": "lumina-clase-06",
+    "templateCredsSetupCompleted": false,
+    "description": "Captura emails de clientes y los registra automáticamente en Google Sheets. Clase 06 del programa AI Automation Diplomatura."
+  },
+  "id": "lumina-clase-06-v1",
+  "tags": [
+    { "name": "lumina" },
+    { "name": "clase-06" },
+    { "name": "bloque-2" }
+  ]
+}

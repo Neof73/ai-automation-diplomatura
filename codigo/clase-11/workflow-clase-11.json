@@ -1,0 +1,208 @@
+{
+  "name": "Lumina — Clase 11 — Clasificador con IA (OpenAI)",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": { "item": [{ "mode": "everyMinute" }] },
+        "filters": {},
+        "options": { "downloadAttachments": false }
+      },
+      "id": "c11-001",
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "credentials": { "gmailOAuth2": { "id": "REEMPLAZAR", "name": "Gmail — Lumina" } }
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            { "name": "email_cliente",  "value": "={{ $json.from.value[0].address }}" },
+            { "name": "nombre_cliente", "value": "={{ $json.from.value[0].name || $json.from.value[0].address }}" },
+            { "name": "asunto",         "value": "={{ $json.subject }}" },
+            { "name": "mensaje",        "value": "={{ ($json.text || '').slice(0, 1500) }}" },
+            { "name": "fecha",          "value": "={{ $now.format('YYYY-MM-DD HH:mm') }}" },
+            { "name": "canal",          "value": "Email" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c11-002",
+      "name": "Set: Extraer campos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": { "__rl": true, "value": "YOUR_SPREADSHEET_ID", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "Consultas", "mode": "name" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Cliente": "={{ $json.email_cliente }}",
+            "Nombre":        "={{ $json.nombre_cliente }}",
+            "Asunto":        "={{ $json.asunto }}",
+            "Mensaje":       "={{ $json.mensaje }}",
+            "Fecha":         "={{ $json.fecha }}",
+            "Canal":         "={{ $json.canal }}",
+            "Estado":        "Abierta"
+          }
+        },
+        "options": {}
+      },
+      "id": "c11-003",
+      "name": "Sheets: Registrar consulta",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [680, 300],
+      "credentials": { "googleSheetsOAuth2Api": { "id": "REEMPLAZAR", "name": "Google Sheets — Lumina" } }
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "send",
+        "modelId": { "__rl": true, "value": "gpt-4o-mini", "mode": "list" },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "Sos un clasificador de mensajes de clientes para Lumina, una tienda de indumentaria online argentina.\n\nTu ÚNICA tarea es clasificar el mensaje que te dan.\n\nRespondé con UNA SOLA PALABRA, sin explicación, sin puntuación:\n- CONSULTA → el cliente quiere saber el estado de su pedido, dónde está, cuándo llega\n- RECLAMO → el cliente reporta un problema: producto defectuoso, equivocado, dañado, quiere devolver o cambiar, expresa insatisfacción\n- OTRO → cualquier otra consulta (preguntas sobre productos, catálogo, precios, horarios, comentarios positivos)\n\nEjemplos:\n\"¿Cuándo llega mi pedido?\" → CONSULTA\n\"Me mandaron el producto equivocado\" → RECLAMO\n\"La caja llegó aplastada\" → RECLAMO\n\"¿Tienen talle XS en la remera slim?\" → OTRO\n\"Qué buena calidad tienen, felicitaciones\" → OTRO"
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.mensaje }}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 10,
+          "temperature": 0
+        }
+      },
+      "id": "c11-004",
+      "name": "OpenAI: Clasificar mensaje",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "credentials": {
+        "openAiApi": { "id": "REEMPLAZAR", "name": "OpenAI — Lumina" }
+      },
+      "notes": "Clasifica el mensaje del cliente usando GPT-4o-mini. Temperatura 0 para máxima consistencia."
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "clasificacion",
+              "value": "={{ $json.message.content.trim().toUpperCase() }}"
+            },
+            {
+              "name": "email_cliente",
+              "value": "={{ $('Set: Extraer campos').item.json.email_cliente }}"
+            },
+            {
+              "name": "nombre_cliente",
+              "value": "={{ $('Set: Extraer campos').item.json.nombre_cliente }}"
+            },
+            {
+              "name": "asunto",
+              "value": "={{ $('Set: Extraer campos').item.json.asunto }}"
+            },
+            {
+              "name": "mensaje",
+              "value": "={{ $('Set: Extraer campos').item.json.mensaje }}"
+            },
+            {
+              "name": "fecha",
+              "value": "={{ $('Set: Extraer campos').item.json.fecha }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c11-005",
+      "name": "Set: Unificar datos + clasificación",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1120, 300],
+      "notes": "Combina la clasificación de la IA con los datos del cliente para el nodo IF siguiente"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": false },
+          "conditions": [
+            {
+              "id": "cond-reclamo",
+              "leftValue":  "={{ $json.clasificacion }}",
+              "rightValue": "RECLAMO",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "any"
+        }
+      },
+      "id": "c11-006",
+      "name": "IF: ¿Es RECLAMO?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1340, 300],
+      "notes": "Ahora usa la clasificación de la IA en lugar de palabras clave. Mucho más preciso."
+    },
+    {
+      "parameters": {
+        "sendTo": "equipo@lumina.com",
+        "subject": "=🔴 Reclamo detectado por IA — {{ $json.email_cliente }}",
+        "emailType": "text",
+        "message": "=La IA clasificó este mensaje como RECLAMO.\n\nCliente: {{ $json.email_cliente }}\nFecha: {{ $json.fecha }}\nAsunto: {{ $json.asunto }}\n\nMensaje:\n{{ $json.mensaje }}\n\n---\nClasificado automáticamente por GPT-4o-mini",
+        "options": {}
+      },
+      "id": "c11-007",
+      "name": "Gmail: Alerta reclamo",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [1560, 180],
+      "credentials": { "gmailOAuth2": { "id": "REEMPLAZAR", "name": "Gmail — Lumina" } }
+    },
+    {
+      "parameters": {
+        "resource": "sheet",
+        "operation": "lookupRows",
+        "documentId": { "__rl": true, "value": "YOUR_SPREADSHEET_ID", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "Pedidos", "mode": "name" },
+        "lookupColumn": "Email Cliente",
+        "lookupValue": "={{ $json.email_cliente }}",
+        "options": { "returnAllMatches": false }
+      },
+      "id": "c11-008",
+      "name": "Sheets: Buscar pedido",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1560, 420],
+      "credentials": { "googleSheetsOAuth2Api": { "id": "REEMPLAZAR", "name": "Google Sheets — Lumina" } }
+    }
+  ],
+  "connections": {
+    "Gmail Trigger":              { "main": [[{ "node": "Set: Extraer campos",          "type": "main", "index": 0 }]] },
+    "Set: Extraer campos":        { "main": [[{ "node": "Sheets: Registrar consulta",   "type": "main", "index": 0 }]] },
+    "Sheets: Registrar consulta": { "main": [[{ "node": "OpenAI: Clasificar mensaje",   "type": "main", "index": 0 }]] },
+    "OpenAI: Clasificar mensaje": { "main": [[{ "node": "Set: Unificar datos + clasificación", "type": "main", "index": 0 }]] },
+    "Set: Unificar datos + clasificación": { "main": [[{ "node": "IF: ¿Es RECLAMO?",   "type": "main", "index": 0 }]] },
+    "IF: ¿Es RECLAMO?": {
+      "main": [
+        [{ "node": "Gmail: Alerta reclamo", "type": "main", "index": 0 }],
+        [{ "node": "Sheets: Buscar pedido", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": { "templateId": "lumina-clase-11", "description": "Reemplaza la detección de reclamos por palabras clave con clasificación inteligente usando GPT-4o-mini. Clase 11 del programa." },
+  "id": "lumina-clase-11-v1",
+  "tags": [{ "name": "lumina" }, { "name": "clase-11" }, { "name": "bloque-3" }, { "name": "ia" }]
+}

@@ -1,0 +1,114 @@
+{
+  "_description": "Templates de mensajes de Slack para los distintos tipos de alerta de Lumina. Copiar el campo 'blocks' en el nodo Slack de n8n.",
+
+  "alerta_reclamo_estandar": {
+    "_uso": "Cuando se detecta un reclamo por palabras clave",
+    "text": "🟡 Nuevo reclamo recibido",
+    "blocks": [
+      {
+        "type": "header",
+        "text": { "type": "plain_text", "text": "🟡 Reclamo recibido — Atención necesaria" }
+      },
+      {
+        "type": "section",
+        "fields": [
+          { "type": "mrkdwn", "text": "*Cliente:*\n{{ $json.email_cliente }}" },
+          { "type": "mrkdwn", "text": "*Fecha:*\n{{ $json.fecha }}" },
+          { "type": "mrkdwn", "text": "*Asunto:*\n{{ $json.asunto }}" }
+        ]
+      },
+      {
+        "type": "section",
+        "text": { "type": "mrkdwn", "text": "*Mensaje:*\n{{ $json.mensaje }}" }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "context",
+        "elements": [
+          { "type": "mrkdwn", "text": "Registrado automáticamente por el sistema de Lumina" }
+        ]
+      }
+    ]
+  },
+
+  "alerta_reclamo_urgente": {
+    "_uso": "Cuando el análisis de IA detecta urgencia alta o sentimiento crítico (Clase 13)",
+    "text": "🔴 URGENTE: Reclamo crítico de cliente",
+    "blocks": [
+      {
+        "type": "header",
+        "text": { "type": "plain_text", "text": "🔴 RECLAMO PRIORITARIO — Responder en < 1 hora" }
+      },
+      {
+        "type": "section",
+        "fields": [
+          { "type": "mrkdwn", "text": "*Cliente:*\n{{ $json.email_cliente }}" },
+          { "type": "mrkdwn", "text": "*Urgencia:*\n🔴 {{ $json.urgencia }}" },
+          { "type": "mrkdwn", "text": "*Sentimiento:*\n{{ $json.sentimiento }}" },
+          { "type": "mrkdwn", "text": "*Fecha:*\n{{ $json.fecha }}" }
+        ]
+      },
+      {
+        "type": "section",
+        "text": { "type": "mrkdwn", "text": "*Señales detectadas:*\n{{ $json.senales }}" }
+      },
+      {
+        "type": "section",
+        "text": { "type": "mrkdwn", "text": "*Mensaje completo:*\n{{ $json.mensaje }}" }
+      },
+      {
+        "type": "actions",
+        "elements": [
+          {
+            "type": "button",
+            "text": { "type": "plain_text", "text": "Ver en Sheets" },
+            "url": "https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID",
+            "style": "danger"
+          }
+        ]
+      }
+    ]
+  },
+
+  "log_consulta_resuelta": {
+    "_uso": "Log silencioso cuando una consulta se resuelve automáticamente",
+    "text": "✅ Consulta resuelta automáticamente",
+    "blocks": [
+      {
+        "type": "section",
+        "text": { "type": "mrkdwn", "text": "✅ *{{ $json.email_cliente }}* — {{ $json.asunto }}" },
+        "accessory": {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Ver" },
+          "url": "https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID"
+        }
+      }
+    ]
+  },
+
+  "reporte_semanal": {
+    "_uso": "Enviar el reporte semanal al canal de gerencia (Clase 14)",
+    "text": "📊 Reporte semanal de atención al cliente",
+    "blocks": [
+      {
+        "type": "header",
+        "text": { "type": "plain_text", "text": "📊 Reporte semanal — {{ $json.fecha_inicio }} al {{ $json.fecha_fin }}" }
+      },
+      {
+        "type": "section",
+        "fields": [
+          { "type": "mrkdwn", "text": "*Total consultas:*\n{{ $json.total }}" },
+          { "type": "mrkdwn", "text": "*Resueltas por IA:*\n{{ $json.auto }} ({{ $json.tasa_auto }}%)" },
+          { "type": "mrkdwn", "text": "*Reclamos:*\n{{ $json.reclamos }}" },
+          { "type": "mrkdwn", "text": "*Casos urgentes:*\n{{ $json.urgentes }}" }
+        ]
+      },
+      {
+        "type": "section",
+        "text": { "type": "mrkdwn", "text": "{{ $json.resumen_ia }}" }
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+id,proceso,descripcion,responsable,tiempo_por_ejecucion_min,frecuencia_semanal,total_horas_semana,costo_hora_ars,costo_semanal_ars,repetitivo,usa_datos_estructurados,tiene_reglas_claras,volumen_alto,puntaje_automatizacion,prioridad
+1,Registro de consultas entrantes,"Leer emails de clientes, copiar datos a la planilla de seguimiento: nombre, email, asunto, fecha",Operador atención al cliente,3,200,10,2500,25000,true,true,true,true,4,ALTA
+2,Respuesta a consultas de estado de pedido,"Buscar el pedido en el sistema, copiar el estado y tracking, redactar el email de respuesta",Operador atención al cliente,5,80,6.67,2500,16667,true,true,true,false,3,ALTA
+3,Generación de reporte semanal de atención,"Contar consultas por tipo, calcular tiempos promedio, redactar el informe para gerencia",Supervisor,90,1,1.5,4000,6000,true,true,false,false,2,MEDIA
+4,Seguimiento de reclamos sin respuesta,"Revisar la planilla, identificar los reclamos sin respuesta de más de 24hs, reenviar al responsable",Supervisor,20,3,1,3500,3500,true,true,true,false,3,MEDIA
+5,Actualización de stock en planilla,"Recibir el parte de stock del depósito, actualizar la planilla de disponibilidad manualmente",Administrativo,45,2,1.5,2500,3750,true,true,true,false,3,MEDIA
+6,Envío de confirmaciones de compra,"Copiar datos del pedido nuevo al email de confirmación y enviar al cliente",Operador,2,50,1.67,2500,4167,true,true,true,true,4,ALTA
+7,Clasificación de emails por categoría,"Leer cada email y moverlo a la carpeta correcta: consulta / reclamo / proveedor / otro",Operador,1.5,200,5,2500,12500,true,false,false,true,2,MEDIA
+8,Elaboración de presupuestos,"Calcular precio según cantidad y descuentos, redactar el presupuesto en PDF y enviarlo",Vendedor,30,15,7.5,3500,26250,false,true,true,false,2,BAJA

@@ -1,0 +1,82 @@
+================================================================================
+PALABRAS CLAVE PARA DETECCIÓN DE RECLAMOS — Lumina
+================================================================================
+
+Estas palabras se configuran en el nodo IF de n8n con condición "contains" (OR).
+El IF devuelve TRUE si el mensaje del cliente contiene CUALQUIERA de estas palabras.
+
+NOTA: Esta es la versión basada en reglas (Clase 07).
+En la Clase 11 se reemplaza por clasificación con IA que es más precisa.
+
+--------------------------------------------------------------------------------
+CATEGORÍA: PRODUCTOS CON PROBLEMAS
+--------------------------------------------------------------------------------
+roto
+rota
+dañado
+dañada
+manchado
+manchada
+defectuoso
+defectuosa
+costura
+rasgado
+rasgada
+agujero
+aplastado
+aplastada
+golpeado
+golpeada
+
+--------------------------------------------------------------------------------
+CATEGORÍA: ENVÍO INCORRECTO
+--------------------------------------------------------------------------------
+equivocado
+equivocada
+incorrecto
+incorrecta
+diferente
+no es lo que pedí
+no coincide
+talle mal
+color mal
+modelo mal
+
+--------------------------------------------------------------------------------
+CATEGORÍA: ACCIONES DE RECLAMO
+--------------------------------------------------------------------------------
+reclamo
+reclamar
+devolver
+devolución
+reintegro
+reembolso
+cambio
+cambiar
+defensa del consumidor
+
+--------------------------------------------------------------------------------
+PALABRAS DE ALTA URGENCIA (agregar ruta prioritaria en clase 09)
+--------------------------------------------------------------------------------
+inaceptable
+vergonzoso
+vergüenza
+fraude
+estafa
+abogado
+tribunal
+medidas legales
+publicar
+reseña
+
+--------------------------------------------------------------------------------
+INSTRUCCIONES PARA N8N
+--------------------------------------------------------------------------------
+En el nodo IF, crear una condición por cada grupo:
+- Value 1: {{ $json.mensaje }}
+- Operation: contains
+- Value 2: [la palabra]
+
+Combinar todas con el operador OR (cualquier condición verdadera = reclamo).
+
+Para mensajes en mayúsculas, activar la opción "Case Insensitive" en el IF.

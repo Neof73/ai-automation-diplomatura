@@ -1,0 +1,53 @@
+{
+  "_descripcion": "Formato JSON que cada agente trabajador devuelve al orquestador. TODOS los agentes deben devolver este objeto, incluyendo cuando fallan.",
+  "_version": "1.0",
+
+  "id_conversacion": {
+    "tipo": "string",
+    "descripcion": "El mismo ID que recibió en la entrada (para correlacionar)"
+  },
+  "agente": {
+    "tipo": "string",
+    "descripcion": "Identificador del agente que procesó la solicitud",
+    "valores_posibles": ["post_venta", "productos", "reclamos", "general"]
+  },
+  "estado": {
+    "tipo": "string",
+    "descripcion": "Resultado del procesamiento",
+    "valores_posibles": ["resuelto", "escalado", "error", "sin_informacion"]
+  },
+  "respuesta_generada": {
+    "tipo": "string",
+    "descripcion": "El texto de la respuesta al cliente. Puede ser null si estado=error.",
+    "ejemplo": "Hola Marta, tu pedido #4821 está en camino..."
+  },
+  "acciones_tomadas": {
+    "tipo": "array",
+    "descripcion": "Lista de herramientas que el agente usó durante el procesamiento",
+    "ejemplo": ["buscar_pedido", "verificar_stock"]
+  },
+  "derivar_a_humano": {
+    "tipo": "boolean",
+    "descripcion": "true si el caso requiere atención humana además de la respuesta automática"
+  },
+  "motivo_derivacion": {
+    "tipo": "string",
+    "descripcion": "Razón por la que se deriva, si derivar_a_humano=true. null si no se deriva.",
+    "ejemplo": "Cliente con urgencia crítica, 4 contactos previos sin resolución"
+  },
+  "confianza": {
+    "tipo": "number",
+    "descripcion": "Estimación de confianza de la respuesta (0.0 a 1.0). Usar 0.5 si no se puede calcular.",
+    "ejemplo": 0.95
+  },
+  "datos_estructurados": {
+    "tipo": "object",
+    "descripcion": "Datos clave extraídos durante el procesamiento para guardar en Sheets",
+    "ejemplo": {
+      "numero_pedido": "4821",
+      "estado_pedido": "En camino",
+      "tipo_consulta": "CONSULTA",
+      "resuelto_auto": true
+    }
+  }
+}

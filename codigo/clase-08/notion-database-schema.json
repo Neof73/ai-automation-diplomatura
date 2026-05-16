@@ -1,0 +1,98 @@
+{
+  "_description": "Esquema de la base de datos de Notion para registrar reclamos de Lumina. Crear esta DB manualmente en Notion y luego conectarla en n8n.",
+  "_instrucciones": "En Notion: crear una nueva Database (Full page). Agregar las siguientes propiedades con el tipo indicado.",
+
+  "nombre_de_la_base": "Reclamos — Lumina",
+
+  "propiedades": [
+    {
+      "nombre": "Título",
+      "tipo": "title",
+      "descripcion": "Campo automático de Notion — usar para el asunto o resumen del reclamo",
+      "valor_n8n": "={{ $json.asunto }}"
+    },
+    {
+      "nombre": "Email Cliente",
+      "tipo": "email",
+      "descripcion": "Email del cliente que realizó el reclamo",
+      "valor_n8n": "={{ $json.email_cliente }}"
+    },
+    {
+      "nombre": "Fecha Reclamo",
+      "tipo": "date",
+      "descripcion": "Fecha y hora en que llegó el reclamo",
+      "valor_n8n": "={{ $now.toISO() }}"
+    },
+    {
+      "nombre": "Estado",
+      "tipo": "select",
+      "descripcion": "Estado actual del reclamo",
+      "opciones": ["Nuevo", "En proceso", "Resuelto", "Cerrado"],
+      "valor_n8n": "Nuevo"
+    },
+    {
+      "nombre": "Prioridad",
+      "tipo": "select",
+      "descripcion": "Prioridad de atención",
+      "opciones": [
+        { "nombre": "🔴 Urgente", "color": "red" },
+        { "nombre": "🟡 Normal", "color": "yellow" },
+        { "nombre": "🟢 Baja", "color": "green" }
+      ],
+      "valor_n8n": "🟡 Normal"
+    },
+    {
+      "nombre": "Número de Pedido",
+      "tipo": "rich_text",
+      "descripcion": "Número de pedido relacionado si se encontró",
+      "valor_n8n": "={{ $json.numero_pedido || 'No identificado' }}"
+    },
+    {
+      "nombre": "Mensaje Original",
+      "tipo": "rich_text",
+      "descripcion": "El texto completo del email del cliente",
+      "valor_n8n": "={{ $json.mensaje }}"
+    },
+    {
+      "nombre": "Asignado a",
+      "tipo": "people",
+      "descripcion": "Miembro del equipo responsable de resolver el reclamo",
+      "valor_n8n": "(asignar manualmente)"
+    },
+    {
+      "nombre": "Canal",
+      "tipo": "select",
+      "descripcion": "Canal por donde llegó el reclamo",
+      "opciones": ["Email", "WhatsApp", "Instagram", "Web", "Teléfono"],
+      "valor_n8n": "={{ $json.canal }}"
+    },
+    {
+      "nombre": "Resuelto en (hs)",
+      "tipo": "number",
+      "descripcion": "Tiempo de resolución en horas (completar al cerrar)",
+      "valor_n8n": "(completar al cerrar)"
+    }
+  ],
+
+  "vistas_recomendadas": [
+    {
+      "nombre": "Tablero por Estado",
+      "tipo": "Board",
+      "agrupar_por": "Estado",
+      "descripcion": "Vista Kanban para gestionar los reclamos"
+    },
+    {
+      "nombre": "Urgentes primero",
+      "tipo": "Table",
+      "ordenar_por": "Prioridad",
+      "filtro": "Estado != Cerrado",
+      "descripcion": "Lista de reclamos abiertos ordenados por prioridad"
+    },
+    {
+      "nombre": "Hoy",
+      "tipo": "Table",
+      "filtro": "Fecha Reclamo = Hoy",
+      "descripcion": "Solo los reclamos de hoy"
+    }
+  ]
+}

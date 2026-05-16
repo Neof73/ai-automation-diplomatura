@@ -1,0 +1,32 @@
+================================================================================
+DESCRIPCIÓN DE HERRAMIENTA — buscar_pedido
+Para configurar en el nodo AI Agent de n8n
+================================================================================
+
+Nombre de la herramienta en n8n: buscar_pedido
+
+Descripción (lo que lee el agente para decidir cuándo usar esta herramienta):
+"Busca el pedido de un cliente en la base de datos de Lumina usando su email.
+Retorna el estado del pedido, fecha estimada de entrega y número de tracking
+si está disponible. Usar cuando el cliente pregunta por su pedido, envío o
+estado de compra. NO usar para consultas sobre productos del catálogo."
+
+Parámetros:
+- email_cliente (string, requerido): el email del cliente tal como aparece
+  en su mensaje. Si el cliente no proporcionó su email, usar el email desde
+  el que escribió.
+
+Nodo de n8n a conectar:
+- Tipo: Google Sheets
+- Operación: Lookup Row
+- Hoja: "Pedidos"
+- Columna de búsqueda: "Email Cliente"
+- Valor a buscar: {{ $fromAI('email_cliente') }}
+
+Campos que devuelve (para usar en la respuesta):
+- ID: número de pedido
+- Estado: Pendiente / En camino / Entregado / Devuelto
+- Fecha Estimada: fecha estimada de entrega
+- Tracking: número de seguimiento (puede estar vacío)
+- Producto, Talle, Color: detalles del pedido
+- Nombre Cliente: nombre para personalizar la respuesta

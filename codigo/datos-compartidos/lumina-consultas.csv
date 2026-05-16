@@ -1,0 +1,21 @@
+id,fecha,email_cliente,asunto,mensaje,tipo,sentimiento,urgencia,estado,respuesta_enviada,tiempo_respuesta_min,agente
+C001,2025-05-12 09:14:00,maria.gonzalez@gmail.com,Estado de mi pedido,Hola! Quería saber cuándo llega mi pedido 4801. Gracias!,CONSULTA,positivo,baja,Resuelto_Auto,true,0.4,IA
+C002,2025-05-12 09:32:00,carlos.lopez@hotmail.com,No llega mi compra,Ya pasaron 7 días y mi pedido sigue sin llegar. Compré la semana pasada y nada.,RECLAMO,negativo_leve,media,Resuelto_Humano,true,45,Humano
+C003,2025-05-12 10:05:00,ana.martinez@yahoo.com,¿Tienen talle XS?,Hola quería saber si la Remera Slim viene en talle XS porque en la web no lo veo claramente,CONSULTA,neutro,baja,Resuelto_Auto,true,0.6,IA
+C004,2025-05-12 10:47:00,lucas.fernandez@gmail.com,Producto llegó dañado,Me llegó la campera con una costura rota en la manga derecha. Esto es inaceptable. Quiero cambio o devolución.,RECLAMO,negativo_fuerte,alta,Resuelto_Humano,true,32,Humano
+C005,2025-05-12 11:20:00,sofia.perez@gmail.com,Consulta de tallas,¿Podrían ayudarme con la guía de talles? No sé si pedir S o M en el vestido de lino.,CONSULTA,positivo,baja,Resuelto_Auto,true,0.5,IA
+C006,2025-05-12 12:03:00,martin.garcia@outlook.com,Tracking no funciona,El número de tracking que me dieron no aparece en el correo. Ya lo busqué varias veces.,CONSULTA,negativo_leve,media,Resuelto_Humano,true,28,Humano
+C007,2025-05-12 13:15:00,valentina.ruiz@gmail.com,Cambio de color,Compré la remera gris pero quisiera cambiarla por negra. ¿Es posible si aún no llegó?,RECLAMO,neutro,baja,Escalado,false,,Pendiente
+C008,2025-05-12 14:02:00,diego.sanchez@gmail.com,Pedido recibido gracias,Solo quería dejar feedback: el producto llegó perfecto y en tiempo. Muy buena calidad.,OTRO,positivo,baja,Resuelto_Auto,true,0.3,IA
+C009,2025-05-12 15:30:00,laura.torres@gmail.com,¿Hacen envíos al exterior?,Hola necesito saber si hacen envíos a Uruguay. Mi hermana vive allá y quiero regalarle algo.,OTRO,neutro,baja,Resuelto_Auto,true,0.4,IA
+C010,2025-05-12 16:45:00,pablo.romero@gmail.com,Ya es la tercera vez que escribo,Ya mandé dos mensajes antes y nadie me respondió. Mi pedido 4810 lleva 10 días y sigue pendiente. Si no recibo respuesta hoy hago el reclamo en defensa del consumidor.,RECLAMO,critico,critica,Resuelto_Humano,true,8,Humano
+C011,2025-05-13 09:00:00,camila.flores@gmail.com,¿Composición de telas?,Hola quería saber de qué material es el Vestido de Lino porque soy alérgica al sintético.,CONSULTA,neutro,media,Resuelto_Auto,true,0.5,IA
+C012,2025-05-13 09:45:00,nicolas.diaz@gmail.com,Devolución por talle,Compré talle L pero me queda grande. Quiero cambiar por M. ¿Cuál es el procedimiento?,RECLAMO,neutro,baja,Resuelto_Auto,true,0.7,IA
+C013,2025-05-13 10:30:00,julieta.moreno@gmail.com,Pedido urgente,Necesito que mi pedido llegue antes del viernes porque es para un regalo de cumpleaños del sábado. ¿Pueden priorizarlo?,CONSULTA,negativo_leve,alta,Escalado,true,15,Humano
+C014,2025-05-13 11:15:00,sebastian.ortiz@gmail.com,Descuento estudiante,¿Tienen descuento para estudiantes universitarios? Vi que algunas marcas lo tienen.,OTRO,neutro,baja,Resuelto_Auto,true,0.4,IA
+C015,2025-05-13 12:00:00,florencia.gutierrez@gmail.com,¿Cuándo reponen?,La Remera Slim rosa talle XS está sin stock. ¿Cuándo vuelve a haber?,CONSULTA,neutro,baja,Resuelto_Auto,true,0.6,IA
+C016,2025-05-13 13:30:00,andres.medina@gmail.com,Seguimiento pedido 4816,Hola buen día podría decirme cuándo llega mi pedido?,CONSULTA,positivo,baja,Resuelto_Auto,true,0.3,IA
+C017,2025-05-13 14:15:00,carolina.vega@gmail.com,Devolución urgente,La campera que recibí no es la que pedí en absoluto. Color diferente y modelo diferente. Quiero la devolución completa de inmediato.,RECLAMO,negativo_fuerte,alta,Resuelto_Humano,true,20,Humano
+C018,2025-05-13 15:00:00,gonzalo.ramos@gmail.com,Estado pedido,¿Pueden decirme el estado de mi pedido 4818?,CONSULTA,neutro,baja,Resuelto_Auto,true,0.4,IA
+C019,2025-05-13 16:45:00,agustina.castro@gmail.com,Combinar colores,¿Me pueden asesorar cómo combinar el Vestido de Lino crudo con otros productos que tienen?,OTRO,positivo,baja,Resuelto_Auto,true,0.8,IA
+C020,2025-05-14 09:20:00,rodrigo.silva@gmail.com,Error en factura,En la factura que recibí dice talle M pero yo pedí XL. ¿Afecta al pedido real o es solo un error de facturación?,RECLAMO,negativo_leve,media,Escalado,true,35,Humano

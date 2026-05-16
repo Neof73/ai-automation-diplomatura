@@ -1,0 +1,76 @@
+{
+  "name": "Lumina — Error Global Handler",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "err-node-001",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "notes": "Se activa cuando cualquier nodo de los workflows configurados falla con un error."
+    },
+    {
+      "parameters": {
+        "sendTo": "equipo@lumina.com",
+        "subject": "=🚨 Error en el sistema de Lumina — {{ $json.workflow.name }}",
+        "emailType": "text",
+        "message": "=⚠️ ERROR DETECTADO EN EL SISTEMA\n\nWorkflow: {{ $json.workflow.name }}\nNodo que falló: {{ $json.execution.lastNodeExecuted }}\nTimestamp: {{ $now.format('YYYY-MM-DD HH:mm:ss') }}\n\nMensaje de error:\n{{ $json.execution.error.message }}\n\nPara revisar la ejecución:\nhttps://cloud.n8n.io/workflow/{{ $json.workflow.id }}/executions\n\n---\nEste mensaje fue generado automáticamente por el Error Handler de Lumina.",
+        "options": {}
+      },
+      "id": "err-node-002",
+      "name": "Gmail: Notificar al equipo",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [460, 300],
+      "credentials": {
+        "gmailOAuth2": { "id": "REEMPLAZAR", "name": "Gmail — Lumina" }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": { "__rl": true, "value": "YOUR_SPREADSHEET_ID", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "Errores", "mode": "name" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Fecha":            "={{ $now.format('YYYY-MM-DD HH:mm:ss') }}",
+            "Workflow":         "={{ $json.workflow.name }}",
+            "Nodo":             "={{ $json.execution.lastNodeExecuted }}",
+            "Error":            "={{ $json.execution.error.message }}",
+            "Execution ID":     "={{ $json.execution.id }}",
+            "Resuelto":         "FALSE"
+          }
+        },
+        "options": {}
+      },
+      "id": "err-node-003",
+      "name": "Sheets: Registrar error",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [680, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": { "id": "REEMPLAZAR", "name": "Google Sheets — Lumina" }
+      },
+      "notes": "Requiere una hoja 'Errores' en la planilla con las columnas: Fecha, Workflow, Nodo, Error, Execution ID, Resuelto"
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [[{ "node": "Gmail: Notificar al equipo", "type": "main", "index": 0 }]]
+    },
+    "Gmail: Notificar al equipo": {
+      "main": [[{ "node": "Sheets: Registrar error", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "templateId": "lumina-error-global",
+    "description": "Workflow de Error Trigger que se activa cuando cualquier otro workflow falla. Notifica al equipo por email y registra el error en Google Sheets."
+  },
+  "id": "lumina-error-global-v1",
+  "tags": [{ "name": "lumina" }, { "name": "clase-09" }, { "name": "infraestructura" }]
+}

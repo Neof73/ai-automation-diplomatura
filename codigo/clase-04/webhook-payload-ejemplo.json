@@ -1,0 +1,50 @@
+{
+  "_comment": "Este es un ejemplo de payload que envía Zapier/n8n cuando recibe un email via Gmail trigger.",
+  "_uso": "Usar este JSON para testear el flujo sin necesidad de enviar un email real. En n8n: usar 'Manual Trigger' y pegar este JSON como datos de entrada.",
+
+  "id": "18f2a3b4c5d6e7f8",
+  "threadId": "18f2a3b4c5d6e7f8",
+  "labelIds": ["INBOX", "UNREAD"],
+  "snippet": "Hola quería saber cuándo llega mi pedido del 11 de mayo. El número es el 4821.",
+
+  "from": {
+    "value": [
+      {
+        "address": "marta.luna@gmail.com",
+        "name": "Marta Luna"
+      }
+    ],
+    "text": "Marta Luna <marta.luna@gmail.com>"
+  },
+
+  "to": {
+    "value": [
+      {
+        "address": "lumina.atencion@gmail.com",
+        "name": "Lumina Atención"
+      }
+    ],
+    "text": "Lumina Atención <lumina.atencion@gmail.com>"
+  },
+
+  "subject": "Consulta sobre pedido 4821",
+
+  "date": "2025-05-16T09:14:22.000Z",
+  "date_formatted": "2025-05-16 09:14",
+
+  "text": "Hola,\n\nQuería saber cuándo llega mi pedido del 11 de mayo.\nEl número es el 4821.\n\nGracias,\nMarta Luna",
+
+  "html": "<p>Hola,</p><p>Quería saber cuándo llega mi pedido del 11 de mayo. El número es el 4821.</p><p>Gracias,<br>Marta Luna</p>",
+
+  "attachments": [],
+
+  "_campos_mapeados": {
+    "email_cliente": "marta.luna@gmail.com",
+    "nombre_cliente": "Marta Luna",
+    "asunto": "Consulta sobre pedido 4821",
+    "mensaje": "Hola,\n\nQuería saber cuándo llega mi pedido del 11 de mayo.\nEl número es el 4821.\n\nGracias,\nMarta Luna",
+    "fecha": "2025-05-16 09:14",
+    "canal": "Email",
+    "estado": "Abierta"
+  }
+}

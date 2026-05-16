@@ -1,0 +1,30 @@
+================================================================================
+DESCRIPCIÓN DE HERRAMIENTA — verificar_stock
+Para configurar en el nodo AI Agent de n8n
+================================================================================
+
+Nombre de la herramienta en n8n: verificar_stock
+
+Descripción:
+"Verifica si un modelo de producto específico tiene stock disponible en un
+talle determinado. Retorna la disponibilidad y, si no hay stock, los modelos
+alternativos disponibles. Usar cuando el cliente pregunta por disponibilidad
+de un producto, talle o color, o cuando quiere hacer un cambio de talle."
+
+Parámetros:
+- modelo (string, requerido): nombre del modelo del producto
+  Ejemplos: "Remera Básica", "Remera Slim", "Pantalón Chino"
+- talle (string, requerido): el talle que consulta el cliente
+  Ejemplos: "S", "M", "L", "XL", "38", "40"
+
+Nodo de n8n a conectar:
+- Tipo: Google Sheets
+- Operación: Lookup Row
+- Hoja: "Productos"
+- Columna de búsqueda: "Nombre"
+- Valor a buscar: {{ $fromAI('modelo') }}
+
+Cómo interpretar el resultado:
+- Si "Talles Disponibles" contiene el talle consultado → hay stock
+- Si no lo contiene → no hay stock, sugerir alternativas de la misma categoría
+- "Stock Total" muestra el total de unidades (no por talle — para orientación)
